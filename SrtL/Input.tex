@@ -1,0 +1,16 @@
+\lstinputlisting[style=Ebnf, firstline=15, lastline=16]{SrtL.ebnf}
+
+Each test must define some input to test against a syntax. 
+Test input is defined using the  \textbf{input} keyword followed by a 
+\textit{concatenated string}. The string is the actual input that is to be 
+tested.
+
+\begin{lstlisting}[style = SrtL]
+test
+    description
+        "Example of how to use input."
+    input 
+        "Input that spans\n"
+        "multiple lines."
+    is valid
+\end{lstlisting}

@@ -1,0 +1,61 @@
+tests =
+    [ [ ws ], test, { ws, test }, [ ws ] ] ;
+
+test =
+    "test", ws,
+    [ description, ws ],
+    input, [ ws ],
+    [ start from, [ ws ] ],
+    [ ( include | exclude ), [ ws ] | exclude all rules, ws ],
+    validity ;
+	
+description =
+    "description", [ ws ], concatenated string ;
+	
+input =
+    "input", [ ws ], concatenated string ;
+	
+start from =
+    "start", ws, "from", ws, string ;
+	
+include =
+    "include", ws, "rules", string list ;
+	
+exclude =
+    "exclude", ws, "rules", string list ;
+	
+exclude all rules =
+    "exclude", ws, "all", ws, "rules" ;
+	
+validity =
+    "is", ws, [ "not", ws ], "valid" ;
+	
+concatenated string list =
+    concatenated string,
+    { [ ws ], "," [ ws ], concatenated string };
+
+concatenated string =
+    string, { [ ws ], string };
+
+string list =
+    string, { [ ws ], "," [ ws ], string };
+
+string =
+    '"', { character | unicode code point | escape sequence }, '"';
+
+character =
+    ? Any Unicode character except class Zs and \u0022 ? ;
+
+unicode code point =
+    "\", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;
+
+escape sequence =
+    "\", 
+    ( '"' | "\" | "0" | "a" | "b" | "f" | "n" | "r" | "t" | "v" ) ;
+
+ws =	
+    ws character, { ws character } ;
+
+ws character =
+    ? Unicode class zs and characters \u0009, \u000B, \u000C,
+    \u000D, \u000A, \u0085, \u2028 and \u2029 ? ; 

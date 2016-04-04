@@ -1,0 +1,26 @@
+\lstinputlisting[style=Ebnf, firstline=18, lastline=19]{SrtL.ebnf}
+
+A test is not required to start from the entry rule of a syntax. This is very 
+useful when testing specific parts of a syntax. To define a starting point for a
+specific test use the \textbf{start from} keywords followed by a 
+\textit{string}. The string is the name of the rule to start testing a syntax 
+from.
+
+Because of this, no boiler plate input needs to be specified and therefore
+there is no need to keep heaps of boiler plate input in sync with the rest of 
+the syntax. In effect, the only tests that may need to be modified after the 
+syntax changes are the tests that concerns the changed part of a syntax.
+
+Notice that the referenced rule name is case sensitive. If the referenced rule 
+does not exist in a syntax, an error must be issued.
+
+\begin{lstlisting}[style = SrtL]
+test
+    description
+        "Start the test somewhere else than the default starting rule."
+    input 
+        "Some input"
+    start from
+        "rule"
+    is valid
+\end{lstlisting}

@@ -1,0 +1,23 @@
+\lstinputlisting[style=Ebnf, firstline=30, lastline=31]{SrtL.ebnf}
+
+Each test must declare if the given input is valid or not according to a syntax. 
+If the test input is declared valid using the \textbf{is valid} and a syntax 
+invalidates the input a warning must be issued. If the input of a test is 
+declared invalid using the \textbf{is not valid} keywords and a syntax validates
+the input a warning must be issued.
+
+\begin{lstlisting}[style = SrtL]
+test
+    description
+        "The input is expected to be valid according to a syntax."
+    input 
+        "Some valid input"
+    is valid
+
+test
+    description
+        "The input is expected to be invalid according to a syntax."
+    input 
+        "Some invalid input"
+    is not valid
+\end{lstlisting}

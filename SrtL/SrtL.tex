@@ -1,0 +1,138 @@
+\documentclass[10pt, a4paper]{article}
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{tocloft}
+
+\title{SrtL Specification \\ \textbf{S}yntax \textbf{R}ule \textbf{T}esting \textbf{L}anguage}
+\author{Paw W. K. Møller}
+
+\titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{-8pt plus 2pt minus 2pt}
+\titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{-8pt plus 2pt minus 2pt}
+\titlespacing\subsubsection{0pt}{12pt plus 4pt minus 2pt}{-8pt plus 2pt minus 2pt}
+
+\definecolor{string}{RGB}{199,100,50}
+\definecolor{optional-keyword}{RGB}{50,183,158}
+
+\lstdefinestyle{Ebnf}
+{
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    basicstyle=\linespread{0.9}\ttfamily,
+    escapechar=\%
+}
+
+\lstdefinestyle{SrtL}
+{
+    morekeywords = [0]
+    {
+        test,
+        input,
+        is,
+        not,
+        valid
+    },
+    morekeywords = [1]
+    {
+        description,
+        start,
+        from,
+        include,
+        exclude,
+        rules,
+        all
+    },
+    keywordstyle=[0]\color{blue},
+    keywordstyle=[1]\color{optional-keyword},
+    morestring=[b][\color{string}]",
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    basicstyle=\linespread{0.9}\ttfamily,
+    escapechar=\%
+}
+
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+
+\setlength\parindent{0pt}
+\linespread{1.2}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \clearpage
+    
+    \pagenumbering{roman}
+    \tableofcontents
+    \clearpage
+    
+    \pagenumbering{arabic}
+    \setcounter{page}{1}
+    \setlength{\parskip}{10pt}
+
+    \maketitle
+
+    \section{Introduction}
+    \input{Introduction.tex}
+    
+    \subsection{Normative References}
+    \input{NormativeReferences.tex}
+    
+    \subsection{Scope}
+    \input{Scope.tex}
+    
+    \subsection{Conformance}
+    \input{Conformance.tex}
+    \clearpage
+    
+    \subsection{Source Encoding}
+    \input{SourceEncoding.tex}
+    
+    \subsection{Conventions}
+    \input{Conventions.tex}
+    
+    \section{Tests}
+    \input{Tests.tex}
+    
+    \section{Descriptions}
+    \input{Descriptions.tex}
+    
+    \section{Input}
+    \input{Input.tex}
+    \clearpage
+    
+    \section{Start From}
+    \label{sub:Start-From}
+    \input{StartFrom.tex}
+    
+    \section{Cherry Picking Rules}
+    \input{CherryPickingRules.tex}
+    
+    \subsection{Including Rules}
+    \input{IncludingRules.tex}
+    
+    \subsection{Excluding Rules}
+    \input{ExcludingRules.tex}
+    
+    \subsection{Excluding All Rules}
+    \input{ExcludingAllRules.tex}
+    \clearpage
+    
+    \section{Validity}
+    \input{Validity.tex}
+
+    \section{Strings}
+    \input{Strings.tex}
+    
+    \section{White Spaces}
+    \input{WhiteSpaces.tex}
+\end{document}
