@@ -1,0 +1,18 @@
+SrtL source must be encoded using utf-8, utf-16be, utf-16le, utf-32be or
+utf-32le. If an implementation is given a source that is not encoded using the 
+methods mentioned above or does not have the appropriate byte order mark (BOM), 
+an error must be issued. 
+
+\begin{table}[h]
+    \centering
+    \caption{Utf Byte Order Marks}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Encoding}   & \textbf{BOM} \\ \hline
+        Utf-8               & EF BB BF     \\ \hline
+        Utf-16be            & FE FF        \\ \hline
+        Utf-16le            & FF FE        \\ \hline
+        Utf-32be            & 00 00 FE FF  \\ \hline
+        Utf-32le            & FF FE 00 00  \\ \hline
+    \end{tabular}
+\end{table}

@@ -1,0 +1,23 @@
+\lstinputlisting[style=Ebnf, firstline=1, lastline=10]{SrtL.ebnf}
+
+A source file may consist of zero or more tests. Each test specifies some input
+to test against a syntax. The order of each part of a test is fixed. The
+intention is to force test writers to write consistent tests.
+\clearpage
+
+Then why are indentation and whitespace not fixed? That is a reasonable 
+question. The reason why indentation and whitespace isn't fixed is that people 
+copy and paste code all the time. It is hard to find errors like a missing 
+space. Another thing is, many have strong opinions about how many spaces should
+be used for indentation. Others do not use space at all, instead they use tabs.
+The consistency that could be gained by forcing a specific way of indenting 
+has been sacrificed for happier test writers.
+
+\begin{lstlisting}[style = SrtL]
+test
+    description
+        "The canonical hello world example."
+    input 
+        "Hello world!"
+    is valid
+\end{lstlisting}

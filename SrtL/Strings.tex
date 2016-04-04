@@ -1,0 +1,51 @@
+\lstinputlisting[style=Ebnf, firstline=37, lastline=54]{SrtL.ebnf}
+
+Strings are used to represent data such as rule names and test input. Strings 
+consists of zero or more characters enclosed in double quotes, as in "hello", 
+and may include both simple escape sequences and Unicode escape sequences.
+The four hex digits in \textit{unicode code point} denotes a Unicode code point.
+
+\clearpage
+
+\begin{table}[h]
+    \centering
+    \caption{Escape Sequence Translation}
+        \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Escape Sequence}     & \textbf{Unicode Code Point}  \\ \hline
+        \textbackslash"              & \textbackslash u0022         \\ \hline
+        \textbackslash\textbackslash & \textbackslash u005C         \\ \hline
+        \textbackslash 0             & \textbackslash u0000         \\ \hline
+        \textbackslash a             & \textbackslash u0007         \\ \hline
+        \textbackslash b             & \textbackslash u0008         \\ \hline
+        \textbackslash f             & \textbackslash u0014         \\ \hline
+        \textbackslash n             & \textbackslash u000A         \\ \hline
+        \textbackslash r             & \textbackslash u000D         \\ \hline
+        \textbackslash t             & \textbackslash u0009         \\ \hline
+        \textbackslash v             & \textbackslash u000B         \\ \hline
+    \end{tabular}
+\end{table}
+
+Multiline input is often required, however strings can not span multiple lines. 
+The reason is that it is very hard to tell Windows style new lines and Linux 
+style new lines apart without a hex editor. So SrtL forces the test writer to be
+more explicit by using escape sequences or Unicode code points combined with 
+concatenation. Notice that the "+" operator is not used to indicate string 
+concatenation as it is in most programming languages. In SrtL, there is no need
+for such operator. Here is an example of string concatenation.
+
+\begin{lstlisting}[style = SrtL]
+"Abc "
+"def"
+\end{lstlisting}
+
+Is equal to 
+
+\begin{lstlisting}[style = SrtL]
+"Abc def"
+\end{lstlisting}
+
+The \textit{concatenated string list} represents a list of possibly 
+concatenated strings. The comma character separates each string. 
+\textit{string list} works the same way as \textit{concatenated string list} 
+but, without the support for concatenation.

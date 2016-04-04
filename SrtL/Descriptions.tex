@@ -1,0 +1,16 @@
+\lstinputlisting[style=Ebnf, firstline=12, lastline=13]{SrtL.ebnf}
+
+Each test may have a description which is useful for explaining the purpose
+of the test. To define a description, use the \textbf{description} keyword
+followed by a \textit{concatenated string}. The string is the actual test 
+description.
+
+\begin{lstlisting}[style = SrtL]
+test
+    description
+        "A very long description of "
+        "why this particular test exists."
+    input 
+        "Single line input"
+    is valid
+\end{lstlisting}
