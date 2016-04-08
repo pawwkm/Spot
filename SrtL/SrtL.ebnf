@@ -44,7 +44,10 @@ string =
     '"', { character | unicode code point | escape sequence }, '"';
 
 character =
-    ? Any Unicode character except class Zs and \u0022 ? ;
+    ? Any Unicode character except classes zs, zl and zp and 
+    characters \u0000 .. \u001F, \u007F, \u0081, \u008D, \u008F, 
+    \u0090, \u009D, \u180E, \u200B .. \u200F, \u202A .. \u202E, 
+    \u2060, \u2066 .. \u206F, \uFEFF, \uFFF9 .. \uFFFB ? ;
 
 unicode code point =
     "\", "u", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;
@@ -57,5 +60,5 @@ ws =
     ws character, { ws character } ;
 
 ws character =
-    ? Unicode class zs and characters \u0009, \u000B, \u000C,
-    \u000D, \u000A, \u0085, \u2028 and \u2029 ? ; 
+    ? Unicode class zs and characters \u0009 .. \u000D, \u0085, 
+    \u2028 and \u2029 ? ; 
