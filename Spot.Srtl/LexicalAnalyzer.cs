@@ -228,6 +228,11 @@ namespace Spot.SrtL
             }
         }
 
+        /// <summary>
+        /// Checks if a character is valid in a string.
+        /// </summary>
+        /// <param name="c">The character to check.</param>
+        /// <returns>True if the character is valid in a string; otherwise false.</returns>
         private static bool IsStringCharacter(char c)
         {
             char[] characters =
