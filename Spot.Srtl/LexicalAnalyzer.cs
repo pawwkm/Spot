@@ -192,7 +192,7 @@ namespace Spot.SrtL
             while (!Source.EndOfStream)
             {
                 c = (char)Source.Peek();
-                if (c == '"')
+                if (!IsStringCharacter(c))
                     break;
 
                 text += Advance();
@@ -226,6 +226,48 @@ namespace Spot.SrtL
 
                 Advance();
             }
+        }
+
+        private static bool IsStringCharacter(char c)
+        {
+            char[] characters =
+            {
+                '\u0022', '\u007F', '\u0081',
+                '\u008D', '\u008F', '\u0090',
+                '\u009D', '\u1680', '\u180E',
+                '\u205F', '\u2060', '\u00A0',
+                '\u3000', '\uFEFF'
+            };
+
+            UnicodeCategory[] categories = 
+            {
+                UnicodeCategory.LineSeparator,
+                UnicodeCategory.ParagraphSeparator,
+            };
+
+            UnicodeCategory category = char.GetUnicodeCategory(c);
+            if (categories.Contains(category))
+                return false;
+
+            if (characters.Contains(c))
+                return false;
+
+            if (c >= '\u0000' && c <= '\u001F')
+                return false;
+
+            if (c >= '\u2000' && c <= '\u200F')
+                return false;
+
+            if (c >= '\u202A' && c <= '\u202F')
+                return false;
+
+            if (c >= '\u2066' && c <= '\u206F')
+                return false;
+
+            if (c >= '\uFFF9' && c <= '\uFFFB')
+                return false;
+
+            return true;
         }
     }
 }
