@@ -47,7 +47,7 @@ character =
     ? Any Unicode character except class Zs and \u0022 ? ;
 
 unicode code point =
-    "\", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;
+    "\", "u", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;
 
 escape sequence =
     "\", 
