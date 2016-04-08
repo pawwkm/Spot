@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Pote.Text;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -220,6 +221,50 @@ namespace Spot.SrtL
 
             Assert.AreEqual("A", token.Text);
             Assert.AreEqual(TokenType.String, token.Type);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="LexicalAnalyzer{TokenType}.Next()"/> can read 
+        /// strings with an escape sequence.
+        /// </summary>
+        [Test]
+        public void Next_StringWithEscapeSequenceContentAsInput_StringRecognized()
+        {
+            Dictionary<char, string> dic = new Dictionary<char, string>()
+            {
+                { '\"', @"\""" },
+                { '\\', @"\\" },
+                { '\0', @"\0" },
+                { '\a', @"\a" },
+                { '\b', @"\b" },
+                { '\f', @"\f" },
+                { '\r', @"\r" },
+                { '\t', @"\t" },
+                { '\v', @"\v" }
+            };
+
+            foreach (var pair in dic)
+            {
+                LexicalAnalyzer analyzer = new LexicalAnalyzer("\"" + pair.Value + "\"");
+                Token<TokenType> token = analyzer.Next();
+
+                Assert.AreEqual(pair.Key.ToString(), token.Text);
+                Assert.AreEqual(TokenType.String, token.Type);
+            }
+        }
+
+        /// <summary>
+        /// Tests that <see cref="LexicalAnalyzer{TokenType}.Next()"/> can read 
+        /// strings with a Unicode escape sequence.
+        /// </summary>
+        [Test]
+        public void Next_StringWithInvalidEscapeSequenceContentAsInput_StringRecognized()
+        {
+            LexicalAnalyzer analyzer = new LexicalAnalyzer("\"\\@\"");
+            Token<TokenType> token = analyzer.Next();
+
+            Assert.AreEqual(@"\@", token.Text);
+            Assert.AreEqual(TokenType.Unknown, token.Type);
         }
     }
 }

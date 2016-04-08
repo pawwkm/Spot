@@ -197,12 +197,12 @@ namespace Spot.SrtL
 
                 if (c == '\\')
                 {
-                    Source.Read();
+                    Advance();
                     c = (char)Source.Peek();
 
                     if (c == 'u')
                     {
-                        Source.Read();
+                        Advance();
 
                         string hex = "";
                         for (int i = 0; i < 4; i++)
@@ -218,6 +218,53 @@ namespace Spot.SrtL
                         }
 
                         text += (char)Convert.ToInt32(hex, 16);
+                    }
+                    else if (c.IsOneOf('"', '\\'))
+                        text += Advance();
+                    else if (c == '0')
+                    {
+                        Advance();
+                        text += '\0';
+                    }
+                    else if (c == 'a')
+                    {
+                        Advance();
+                        text += '\a';
+                    }
+                    else if (c == 'b')
+                    {
+                        Advance();
+                        text += '\b';
+                    }
+                    else if (c == 'f')
+                    {
+                        Advance();
+                        text += '\f';
+                    }
+                    else if (c == 'n')
+                    {
+                        Advance();
+                        text += '\n';
+                    }
+                    else if (c == 'r')
+                    {
+                        Advance();
+                        text += '\r';
+                    }
+                    else if (c == 't')
+                    {
+                        Advance();
+                        text += '\t';
+                    }
+                    else if (c == 'v')
+                    {
+                        Advance();
+                        text += '\v';
+                    }
+                    else
+                    {
+                        text += "\\" + Advance();
+                        return new Token<TokenType>(text, TokenType.Unknown, start);
                     }
                 }
                 else
