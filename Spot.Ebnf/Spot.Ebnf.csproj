@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0D475C39-BA44-4587-8E44-B675A957D0D3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spot.Ebnf</RootNamespace>
+    <AssemblyName>Spot.Ebnf</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Spot.Ebnf.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Release\Spot.Ebnf.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>ExtendedDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Pote, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pote.1.0.1\lib\net45\Pote.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Pote.Text, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pote.Text.0.7.0\lib\net45\Pote.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Definition.cs" />
+    <Compile Include="DefinitionList.cs" />
+    <Compile Include="EmptySequence.cs" />
+    <Compile Include="ExcludedRules.cs" />
+    <Compile Include="FuzzyTestGenerator.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="GroupedSequence.cs" />
+    <Compile Include="IEnumerable`1Extensions.cs" />
+    <Compile Include="IList`1Extensions.cs" />
+    <Compile Include="IncludedRules.cs" />
+    <Compile Include="ISpecialSequenceGenerator.cs" />
+    <Compile Include="ISpecialSequenceValidator.cs" />
+    <Compile Include="Justifications.cs" />
+    <Compile Include="LeftRecursionChecker.cs" />
+    <Compile Include="LexicalAnalyzer.cs" />
+    <Compile Include="MetaIdentifier.cs" />
+    <Compile Include="OptionalSequence.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="PathState.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepeatedSequence.cs" />
+    <Compile Include="Rule.cs" />
+    <Compile Include="RuleFrame.cs" />
+    <Compile Include="RuleReferenceResolver.cs" />
+    <Compile Include="RuleTrace.cs" />
+    <Compile Include="Sequence.cs" />
+    <Compile Include="SingleDefinition.cs" />
+    <Compile Include="SpecialSequence.cs" />
+    <Compile Include="SpecialSequenceException.cs" />
+    <Compile Include="SyntacticFactor.cs" />
+    <Compile Include="SyntacticTerm.cs" />
+    <Compile Include="Syntax.cs" />
+    <Compile Include="SyntaxException.cs" />
+    <Compile Include="SyntaxPath.cs" />
+    <Compile Include="SyntaxReader.cs" />
+    <Compile Include="SyntaxValidationResult.cs" />
+    <Compile Include="SyntaxValidator.cs" />
+    <Compile Include="TerminalString.cs" />
+    <Compile Include="TokenType.cs" />
+    <Compile Include="UndefinedRuleException.cs" />
+    <Compile Include="Unicode\TokenType.cs" />
+    <Compile Include="Unicode\UnicodeSequence.cs" />
+    <Compile Include="Unicode\UnicodeSequenceGenerator.cs" />
+    <Compile Include="Unicode\UnicodeSequenceLexicalAnalyzer.cs" />
+    <Compile Include="Unicode\UnicodeSequenceParser.cs" />
+    <Compile Include="Unicode\UnicodeSpecialSequenceValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Unicode\Unicode Sequence.ebnf" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
