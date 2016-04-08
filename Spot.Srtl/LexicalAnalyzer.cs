@@ -195,7 +195,33 @@ namespace Spot.SrtL
                 if (!IsStringCharacter(c))
                     break;
 
-                text += Advance();
+                if (c == '\\')
+                {
+                    Source.Read();
+                    c = (char)Source.Peek();
+
+                    if (c == 'u')
+                    {
+                        Source.Read();
+
+                        string hex = "";
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (Source.EndOfStream)
+                                return new Token<TokenType>(text, TokenType.EndOfInput, start);
+
+                            c = Advance();
+                            hex += c;
+
+                            if (!char.IsDigit(c) && !c.IsOneOf('a', 'b', 'c', 'd', 'e', 'f'))
+                                return new Token<TokenType>(text, TokenType.Unknown, start);
+                        }
+
+                        text += (char)Convert.ToInt32(hex, 16);
+                    }
+                }
+                else
+                    text += Advance();
             }
 
             c = Advance();
@@ -228,6 +254,11 @@ namespace Spot.SrtL
             }
         }
 
+        /// <summary>
+        /// Checks if a character is valid in a string.
+        /// </summary>
+        /// <param name="c">The character to check.</param>
+        /// <returns>True if the character is valid in a string; otherwise false.</returns>
         private static bool IsStringCharacter(char c)
         {
             char[] characters =

@@ -207,5 +207,19 @@ namespace Spot.SrtL
             Assert.AreEqual(@"Abc def", token.Text);
             Assert.AreEqual(TokenType.String, token.Type);
         }
+
+        /// <summary>
+        /// Tests that <see cref="LexicalAnalyzer{TokenType}.Next()"/> can read 
+        /// strings with a Unicode escape sequence.
+        /// </summary>
+        [Test]
+        public void Next_StringWithUnicodeEscapeSequenceContentAsInput_StringRecognized()
+        {
+            LexicalAnalyzer analyzer = new LexicalAnalyzer("\"\\u0041\"");
+            Token<TokenType> token = analyzer.Next();
+
+            Assert.AreEqual("A", token.Text);
+            Assert.AreEqual(TokenType.String, token.Type);
+        }
     }
 }
