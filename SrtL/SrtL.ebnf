@@ -44,10 +44,11 @@ string =
     '"', { character | unicode code point | escape sequence }, '"';
 
 character =
-    ? Any Unicode character except classes zs, zl and zp and 
-    characters \u0000 .. \u001F, \u007F, \u0081, \u008D, \u008F, 
-    \u0090, \u009D, \u180E, \u200B .. \u200F, \u202A .. \u202E, 
-    \u2060, \u2066 .. \u206F, \uFEFF, \uFFF9 .. \uFFFB ? ;
+    ? Any Unicode character except classes zl and zp and 
+    characters \u0000 .. \u001F, \u0022, \u007F, \u0081, \u008D, 
+    \u008F, \u0090, \u009D, \u1680, \u180E, \u2000 .. \u200F, 
+    \u202A .. \u202F,  \u205F, \u2060, \u2066 .. \u206F, \u00A0, 
+    \u3000, \uFEFF, \uFFF9 .. \uFFFB ? ;
 
 unicode code point =
     "\", "u", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;

@@ -204,7 +204,7 @@ namespace Spot.SrtL
             LexicalAnalyzer analyzer = new LexicalAnalyzer("\"Abc def\"");
             Token<TokenType> token = analyzer.Next();
 
-            Assert.AreEqual("Abc def", token.Text);
+            Assert.AreEqual(@"Abc def", token.Text);
             Assert.AreEqual(TokenType.String, token.Type);
         }
     }
