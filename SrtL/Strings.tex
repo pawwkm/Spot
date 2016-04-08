@@ -4,11 +4,14 @@ Strings are used to represent data such as rule names and test input. Strings
 consists of zero or more characters enclosed in double quotes, as in "hello", 
 and may include both simple escape sequences and Unicode escape sequences.
 The four hex digits in \textit{unicode code point} denotes a Unicode code point.
+If \textbackslash prefixes anything else then the characters in table 
+\ref{table:escape-sequence-translation}, an error must be issued.
 
 \begin{table}[h]
     \centering
     \caption{Escape Sequence Translation}
-        \begin{tabular}{|l|l|}
+    \label{table:escape-sequence-translation}
+    \begin{tabular}{|l|l|}
         \hline
         \textbf{Escape Sequence}     & \textbf{Unicode Code Point}  \\ \hline
         \textbackslash"              & \textbackslash u0022         \\ \hline
