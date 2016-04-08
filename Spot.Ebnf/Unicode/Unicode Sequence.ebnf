@@ -1,0 +1,42 @@
+﻿sequence = 
+    [ ws ], ( any element except | some elements except ), [ ws ] ; 
+
+some elements except = 
+	"Unicode", ws, elements, [ ws, except ]  ;
+
+any element except =
+	"All", ws, "Unicode", "characters", [ ws, except ] ;
+
+except =
+	"except", ws, elements ;
+
+elements =
+	( classes | characters ) | classes, ws, "and", ws, characters ;
+
+classes = 
+	"class", ws, class |
+    "classes", ws, class, { ws, ",", class }, ws, "and", ws class ;
+
+class = 
+    "cc" | "cf" | "cn" | "co" | "cs" | "ll" |
+    "lm" | "lo" | "lt" | "lu" | "mc" | "me" |
+    "mn" | "nd" | "nl" | "no" | "pc" | "pd" |
+    "pe" | "pf" | "pi" | "po" | "ps" | "sc" |
+    "sk" | "sm" | "so" | "zi" | "zp" | "zs" ;
+
+characters = 
+	"character", ws, character |
+    "characters", ws, character, { ws, ",", character }, ws, "and", ws character ;
+
+character = 
+    "\u", 4 * digit ;
+    
+digit = 
+    "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" |
+	"a" | "b" | "c" | "e" | "f" | "A" | "B" | "C" | "E" | "F" ;
+    
+ws =
+    ws character, { ws character } ;
+    
+ws character = 
+    ? Unicode class zs and characters \u0009, \u000B, \u000C, \u000D, \u000A, \u0085, \u2028 and \u2029 ? ; 
