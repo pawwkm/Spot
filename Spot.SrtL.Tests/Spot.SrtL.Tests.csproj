@@ -35,6 +35,10 @@
     <DocumentationFile>bin\Release\Spot.SrtL.Tests.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -43,8 +47,8 @@
       <HintPath>..\packages\Pote.1.0.1\lib\net45\Pote.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Pote.Text, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Pote.Text.0.7.0\lib\net45\Pote.Text.dll</HintPath>
+    <Reference Include="Pote.Text, Version=0.7.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Pote.Text.0.7.2\lib\net45\Pote.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -52,15 +56,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LexicalAnalyzerTests.cs" />
+    <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spot.Srtl\Spot.Srtl.csproj">
+    <ProjectReference Include="..\Spot.Srtl\Spot.SrtL.csproj">
       <Project>{9b208cfd-52ce-4436-ac52-3ce12694a375}</Project>
-      <Name>Spot.Srtl</Name>
+      <Name>Spot.SrtL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

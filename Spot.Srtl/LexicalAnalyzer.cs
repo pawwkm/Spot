@@ -12,7 +12,7 @@ namespace Spot.SrtL
     /// </summary>
     internal sealed class LexicalAnalyzer : LexicalAnalyzer<TokenType>
     {
-        private static readonly string[] allowedEncodings = 
+        private static readonly string[] AllowedEncodings = 
         {
             "utf-8",
             "utf-16",   // Little endian.
@@ -37,20 +37,6 @@ namespace Spot.SrtL
             "all"
         };
 
-        private static readonly string[] EscapeSequences =
-        {
-            @"\""",
-            @"\\",
-            @"\0",
-            @"\a",
-            @"\b",
-            @"\f",
-            @"\n",
-            @"\r",
-            @"\t",
-            @"\v"
-        };
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LexicalAnalyzer"/> class.
         /// </summary>
@@ -69,7 +55,7 @@ namespace Spot.SrtL
             // to determine the encoding of the underlying stream.
             reader.Peek();
 
-            if (!reader.CurrentEncoding.BodyName.IsOneOf(allowedEncodings))
+            if (!reader.CurrentEncoding.BodyName.IsOneOf(AllowedEncodings))
                 throw new ArgumentException("Invalid encoding.", nameof(reader));
         }
 
@@ -95,7 +81,7 @@ namespace Spot.SrtL
             // to determine the encoding of the underlying stream.
             reader.Peek();
 
-            if (!reader.CurrentEncoding.BodyName.IsOneOf(allowedEncodings))
+            if (!reader.CurrentEncoding.BodyName.IsOneOf(AllowedEncodings))
                 throw new ArgumentException("Invalid encoding.", nameof(reader));
         }
 
@@ -139,6 +125,53 @@ namespace Spot.SrtL
 
             InputPosition start = Position.DeepCopy();
             return new Token<TokenType>(Advance(), TokenType.Unknown, start);
+        }
+
+        /// <summary>
+        /// Checks if a character is valid in a string.
+        /// </summary>
+        /// <param name="c">The character to check.</param>
+        /// <returns>True if the character is valid in a string; otherwise false.</returns>
+        private static bool IsStringCharacter(char c)
+        {
+            char[] characters =
+            {
+                '\u0022', '\u007F', '\u0081',
+                '\u008D', '\u008F', '\u0090',
+                '\u009D', '\u1680', '\u180E',
+                '\u205F', '\u2060', '\u00A0',
+                '\u3000', '\uFEFF'
+            };
+
+            UnicodeCategory[] categories =
+            {
+                UnicodeCategory.LineSeparator,
+                UnicodeCategory.ParagraphSeparator,
+            };
+
+            UnicodeCategory category = char.GetUnicodeCategory(c);
+            if (categories.Contains(category))
+                return false;
+
+            if (characters.Contains(c))
+                return false;
+
+            if (c >= '\u0000' && c <= '\u001F')
+                return false;
+
+            if (c >= '\u2000' && c <= '\u200F')
+                return false;
+
+            if (c >= '\u202A' && c <= '\u202F')
+                return false;
+
+            if (c >= '\u2066' && c <= '\u206F')
+                return false;
+
+            if (c >= '\uFFF9' && c <= '\uFFFB')
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -299,53 +332,6 @@ namespace Spot.SrtL
 
                 Advance();
             }
-        }
-
-        /// <summary>
-        /// Checks if a character is valid in a string.
-        /// </summary>
-        /// <param name="c">The character to check.</param>
-        /// <returns>True if the character is valid in a string; otherwise false.</returns>
-        private static bool IsStringCharacter(char c)
-        {
-            char[] characters =
-            {
-                '\u0022', '\u007F', '\u0081',
-                '\u008D', '\u008F', '\u0090',
-                '\u009D', '\u1680', '\u180E',
-                '\u205F', '\u2060', '\u00A0',
-                '\u3000', '\uFEFF'
-            };
-
-            UnicodeCategory[] categories = 
-            {
-                UnicodeCategory.LineSeparator,
-                UnicodeCategory.ParagraphSeparator,
-            };
-
-            UnicodeCategory category = char.GetUnicodeCategory(c);
-            if (categories.Contains(category))
-                return false;
-
-            if (characters.Contains(c))
-                return false;
-
-            if (c >= '\u0000' && c <= '\u001F')
-                return false;
-
-            if (c >= '\u2000' && c <= '\u200F')
-                return false;
-
-            if (c >= '\u202A' && c <= '\u202F')
-                return false;
-
-            if (c >= '\u2066' && c <= '\u206F')
-                return false;
-
-            if (c >= '\uFFF9' && c <= '\uFFFB')
-                return false;
-
-            return true;
         }
     }
 }
