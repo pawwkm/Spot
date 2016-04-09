@@ -1,5 +1,6 @@
 ﻿using System;
 using Pote.Text;
+using Pote;
 
 namespace Spot.SrtL
 {
@@ -8,7 +9,7 @@ namespace Spot.SrtL
     /// </summary>
     internal sealed class Parser
     {
-        private ParsingResult result;
+        private TestCollection result;
 
         private LexicalAnalyzer<TokenType> analyzer;
 
@@ -20,13 +21,13 @@ namespace Spot.SrtL
         /// <exception cref="ArgumentNullException">
         /// <paramref name="source"/> is null.
         /// </exception>
-        public ParsingResult Parse(LexicalAnalyzer<TokenType> source)
+        public TestCollection Parse(LexicalAnalyzer<TokenType> source)
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
             analyzer = source;
-            result = new ParsingResult();
+            result = new TestCollection();
 
             while (!source.EndOfInput)
                 Test();
@@ -52,7 +53,7 @@ namespace Spot.SrtL
             test.Input = Input();
             test.Validity = Validity();
 
-            result.Tests.Add(test);
+            result.Add(test);
         }
 
         /// <summary>
@@ -164,6 +165,8 @@ namespace Spot.SrtL
         /// <summary>
         /// Issues the given <paramref name="error"/> until 
         /// a token's text matches the given <paramref name="text"/>.
+        /// To ensure this methods doesn't run to far, it will stop 
+        /// at the next token that is the 'test' keyword.
         /// </summary>
         /// <param name="text">The text to match against tokens.</param>
         /// <param name="error">The error to issue.</param>
@@ -173,8 +176,11 @@ namespace Spot.SrtL
             if (token.Type == TokenType.EndOfInput)
                 return;
 
-            while (token.Text != text)
+            while (!token.Text.IsOneOf(text, "test"))
             {
+                if (token.Type == TokenType.EndOfInput)
+                    return;
+
                 result.Errors.Add(token.Position.ToString(error));
 
                 analyzer.Next();
@@ -185,6 +191,8 @@ namespace Spot.SrtL
         /// <summary>
         /// Issues the given <paramref name="error"/> until 
         /// a token's type matches the given <paramref name="type"/>.
+        /// To ensure this methods doesn't run to far, it will stop 
+        /// at the next token that is the 'test' keyword.
         /// </summary>
         /// <param name="type">The type to match against tokens.</param>
         /// <param name="error">The error to issue.</param>
@@ -194,8 +202,11 @@ namespace Spot.SrtL
             if (token.Type == TokenType.EndOfInput)
                 return;
 
-            while (token.Type != type)
+            while (token.Type != type && token.Text != "test")
             {
+                if (token.Type == TokenType.EndOfInput)
+                    return;
+
                 result.Errors.Add(token.Position.ToString(error));
 
                 analyzer.Next();

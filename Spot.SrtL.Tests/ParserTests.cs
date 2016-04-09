@@ -30,7 +30,7 @@ namespace Spot.SrtL
 
             Assert.AreEqual(0, result.Errors.Count);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
@@ -69,7 +69,7 @@ namespace Spot.SrtL
 
             Assert.AreEqual(0, result.Errors.Count);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
@@ -110,7 +110,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("2:4: Expected 'test' keyword.", result.Errors[0]);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
@@ -140,7 +140,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("2:1: Expected 'input' keyword.", result.Errors[0]);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
@@ -169,7 +169,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("2:8: Expected a concatenated string.", result.Errors[0]);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
@@ -198,7 +198,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("2:13: Expected 'is' keyword.", result.Errors[0]);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
@@ -227,7 +227,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, result.Errors.Count);
             Assert.AreEqual("2:17: Expected 'valid' keyword.", result.Errors[0]);
 
-            var tests = result.Tests.ToArray();
+            var tests = result.ToArray();
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
