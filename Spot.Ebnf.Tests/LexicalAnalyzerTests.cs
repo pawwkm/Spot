@@ -156,5 +156,34 @@ namespace Spot.Ebnf
             Assert.AreEqual("@", token.Text);
             Assert.AreEqual(TokenType.Unknown, token.Type);
         }
+
+        /// <summary>
+        /// Tests that <see cref="LexicalAnalyzer{TokenType}.Next()"/> can 
+        /// identify white spaces.
+        /// </summary>
+        [Test]
+        public void Next_WhiteSpaceAsInput_Success()
+        {
+            var whitespaces = new char[]
+            {
+                // Unicode class Zs.
+                '\u0020', '\u00A0', '\u1680', '\u2000', '\u2001',
+                '\u2002', '\u2003', '\u2004', '\u2005', '\u2006',
+                '\u2007', '\u2008', '\u2009', '\u200A', '\u202F',
+                '\u205F', '\u3000',
+
+                '\u0009', '\u000A', '\u000B', '\u000C', '\u000D',
+                '\u0085', '\u2028', '\u2029'
+            };
+
+            foreach (var whitespace in whitespaces)
+            {
+                LexicalAnalyzer analyzer = new LexicalAnalyzer(whitespace.ToString());
+
+                analyzer.Next();
+
+                Assert.AreEqual(1, analyzer.Position.Index);
+            }
+        }
     }
 }
