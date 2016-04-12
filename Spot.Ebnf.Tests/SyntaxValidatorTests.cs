@@ -454,7 +454,7 @@ namespace Spot.Ebnf
                 return true; 
             });
 
-            string text = "syntax = ? Special ?";
+            string text = "syntax = ? Special ? ;";
 
             SyntaxReader reader = new SyntaxReader();
             Syntax syntax = reader.Read(text.ToStream());
@@ -479,7 +479,7 @@ namespace Spot.Ebnf
             ISpecialSequenceValidator special = Substitute.For<ISpecialSequenceValidator>();
             special.IsValid(Arg.Any<string>()).Returns(true);
 
-            string text = "syntax = ? Special ?";
+            string text = "syntax = ? Special ? ;";
             SyntaxReader reader = new SyntaxReader();
             Syntax syntax = reader.Read(text.ToStream());
 
