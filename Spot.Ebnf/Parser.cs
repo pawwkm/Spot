@@ -73,16 +73,17 @@ namespace Spot.Ebnf
             while (source.LookAhead().Type != TokenType.EndOfInput)
             {
                 if (source.LookAhead().Text.IsOneOf(";", "."))
-                {
-                    source.Next();
                     break;
-                }
 
                 if (source.LookAhead().Text == "|")
                     source.Next();
 
                 rule.Branches.Add(DefinitionList());
             }
+
+            Token<TokenType> endSymbol = source.Next();
+            if (!endSymbol.Text.IsOneOf(";", "."))
+                throw new ParsingException(endSymbol.Position.ToString("Expected ';' or '.'"));
 
             return rule;
         }
