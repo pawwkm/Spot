@@ -327,7 +327,7 @@ namespace Spot.SrtL
                 char c = (char)Source.Peek();
                 UnicodeCategory category = char.GetUnicodeCategory(c);
 
-                if (category != UnicodeCategory.SpaceSeparator || !characters.Contains(c))
+                if (category != UnicodeCategory.SpaceSeparator && !characters.Contains(c))
                     break;
 
                 Advance();
