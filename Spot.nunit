@@ -1,0 +1,11 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="Build\Debug\Spot.SrtL.Tests.dll" />
+    <assembly path="Build\Debug\Spot.Ebnf.Tests.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="Build\Release\Spot.SrtL.Tests.dll" />
+    <assembly path="Build\Release\Spot.Ebnf.Tests.dll" />
+  </Config>
+</NUnitProject>
