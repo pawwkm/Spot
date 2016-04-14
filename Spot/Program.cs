@@ -15,7 +15,8 @@ namespace Spot
         private static int Main(string[] args)
         {
             var executor = new CommandExecutor();
-            executor.AddVerb<TestVerb>();
+            executor.AddVerb<TestVerb>()
+                    .AddVerb<FuzzVerb>();
 
             return executor.Execute(args);
         }
