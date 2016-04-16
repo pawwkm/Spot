@@ -25,7 +25,7 @@ namespace Spot
         /// <summary>
         /// The max recursion depth of each rule.
         /// </summary>
-        [SingleOption('d', "recursion-depth", Help = "The max depth of recursion for a single rule")]
+        [SingleOption('d', "recursion-depth", Help = "The max depth of recursion for a single rule", Default = 3)]
         public int MaxRecursionDepth
         {
             get;
