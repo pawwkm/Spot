@@ -4,6 +4,7 @@ using Spot.Ebnf;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 
 namespace Spot
 {
@@ -47,6 +48,16 @@ namespace Spot
         /// </summary>
         [FileOption(Help = "The syntax to generate fuzzy tests for", Pattern = @".*\.ebnf")]
         public string SyntaxFile
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// If true the number of tests generated is displayed.
+        /// </summary>
+        [SingleOption('c', "count", Help = "Displays the number of tests generated")]
+        public bool DisplayTestCount
         {
             get;
             set;
@@ -127,6 +138,16 @@ namespace Spot
                         serializer.Serialize(jw, tests);
                     }
                 }
+            }
+
+            if (DisplayTestCount)
+            {
+                if (tests.Count == 0)
+                    Console.WriteLine("No tests generated");
+                else if (tests.Count == 1)
+                    Console.WriteLine("1 test generated");
+                else
+                    Console.WriteLine("{0} tests generated", tests.Count);
             }
 
             return 0;
