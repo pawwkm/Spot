@@ -334,5 +334,162 @@ namespace Spot.Ebnf
 
             CollectionAssert.AreEquivalent(expected, tests);
         }
+
+        /// <summary>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
+        /// generates all the variations of a rule consisting defintion list 
+        /// of the same rule repeated three times.
+        /// </summary>
+        [Test]
+        public void Generate_TheSameRuleRepeated3Times_Success()
+        {
+            var expected = new List<string>();
+            for (var d1 = 0; d1 < 10; d1++)
+            {
+                for (var d2 = 0; d2 < 10; d2++)
+                {
+                    for (var d3 = 0; d3 < 10; d3++)
+                        expected.Add(d1.ToString() + d2.ToString() + d3.ToString());
+                }
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine("number = digit, digit, digit ;")
+                .AppendLine("digit = '0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;");
+
+            var reader = new SyntaxReader();
+            var syntax = reader.Read(text.ToStream());
+
+            var generator = new FuzzyTestGenerator();
+
+            var tests = generator.Generate(syntax);
+
+            CollectionAssert.AreEquivalent(expected, tests);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
+        /// generates all the variations of a rule consisting defintion list 
+        /// of the same rule repeated three times using the '*' symbol.
+        /// </summary>
+        [Test]
+        public void Generate_TheSameRuleUsingRepetition_Success()
+        {
+            var expected = new List<string>();
+            for (var d1 = 0; d1 < 10; d1++)
+            {
+                for (var d2 = 0; d2 < 10; d2++)
+                {
+                    for (var d3 = 0; d3 < 10; d3++)
+                        expected.Add(d1.ToString() + d2.ToString() + d3.ToString());
+                }
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine("number = 3 * digit ;")
+                .AppendLine("digit = '0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;");
+
+            var reader = new SyntaxReader();
+            var syntax = reader.Read(text.ToStream());
+
+            var generator = new FuzzyTestGenerator();
+
+            var tests = generator.Generate(syntax);
+
+            CollectionAssert.AreEquivalent(expected, tests);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
+        /// generates all the variations of a rule consisting defintion list 
+        /// of indenticle branched groups of terminals.
+        /// </summary>
+        [Test]
+        public void Generate_3IndenticleBranchedGroups_Success()
+        {
+            var expected = new List<string>();
+            for (var d1 = 0; d1 < 10; d1++)
+            {
+                for (var d2 = 0; d2 < 10; d2++)
+                {
+                    for (var d3 = 0; d3 < 10; d3++)
+                        expected.Add(d1.ToString() + d2.ToString() + d3.ToString());
+                }
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine("number = ('0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'),")
+                .AppendLine("         ('0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'),")
+                .AppendLine("         ('0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9');");
+
+            var reader = new SyntaxReader();
+            var syntax = reader.Read(text.ToStream());
+
+            var generator = new FuzzyTestGenerator();
+
+            var tests = generator.Generate(syntax);
+
+            CollectionAssert.AreEquivalent(expected, tests);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
+        /// generates all the variations of a rule consisting defintion list 
+        /// of two rules. The first has less branches than the second.
+        /// </summary>
+        [Test]
+        public void Generate_FirstRuleHasLessBranchesThanTheSecond_Success()
+        {
+            var expected = new List<string>();
+            for (var c = 'A'; c < 'E'; c++)
+            {
+                for (var d = 0; d < 10; d++)
+                    expected.Add(c.ToString() + d.ToString());
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine("number = letter, digit ;")
+                .AppendLine("digit = '0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;")
+                .AppendLine("letter = 'A' | 'B'| 'C' | 'D' ;");
+
+            var reader = new SyntaxReader();
+            var syntax = reader.Read(text.ToStream());
+
+            var generator = new FuzzyTestGenerator();
+
+            var tests = generator.Generate(syntax);
+
+            CollectionAssert.AreEquivalent(expected, tests);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
+        /// generates all the variations of a rule consisting defintion list 
+        /// of two rules. The first has more branches than the second.
+        /// </summary>
+        [Test]
+        public void Generate_FirstRuleHasMoreBranchesThanTheSecond_Success()
+        {
+            var expected = new List<string>();
+            for (var d = 0; d < 10; d++)
+            {
+                for (var c = 'A'; c < 'E'; c++)
+                    expected.Add(d.ToString() + c.ToString());
+            }
+
+            var text = new StringBuilder();
+            text.AppendLine("number = digit, letter ;")
+                .AppendLine("digit = '0' | '1'| '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;")
+                .AppendLine("letter = 'A' | 'B'| 'C' | 'D' ;");
+
+            var reader = new SyntaxReader();
+            var syntax = reader.Read(text.ToStream());
+
+            var generator = new FuzzyTestGenerator();
+
+            var tests = generator.Generate(syntax);
+
+            CollectionAssert.AreEquivalent(expected, tests);
+        }
     }
 }
