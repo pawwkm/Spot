@@ -201,28 +201,21 @@ namespace Spot.Ebnf
         private List<string> Generate(SingleDefinition definition)
         {
             var strings = new List<string>();
-            foreach (var term in definition.SyntacticTerms)
+            for (int i = definition.SyntacticTerms.Count; i > 0; i--)
             {
-                var generated = Generate(term);
+                var temp = new List<string>(strings);
+                var generated = Generate(definition.SyntacticTerms[i - 1]);
 
-                if (strings.Count < generated.Count)
-                {
-                    string val = "";
-                    if (strings.Count > 0)
-                        val = strings.First();
-
-                    strings.AddRange(Enumerable.Repeat(val, generated.Count - strings.Count));
-                }
-
-                if (generated.Count == 1)
-                {
-                    for (int i = 0; i < strings.Count; i++)
-                        strings[i] += generated[0];
-                }
+                if (strings.Count == 0)
+                    strings.AddRange(generated);
                 else
                 {
-                    for (int i = 0; i < generated.Count; i++)
-                        strings[i] += generated[i];
+                    strings.Clear();
+                    foreach (var t in temp)
+                    {
+                        foreach (var g in generated)
+                            strings.Add(g + t);
+                    }
                 }
             }
 
@@ -268,16 +261,18 @@ namespace Spot.Ebnf
         /// <returns>The generated tests.</returns>
         private List<string> Generate(SyntacticFactor factor)
         {
-            var strings = new List<string>();
-            for (int i = 0; i < factor.NumberOfRepetitions; i++)
+            var generated = Generate(factor.SyntacticPrimary);
+
+            var strings = new List<string>(generated);
+            for (var i = 1; i < factor.NumberOfRepetitions; i++)
             {
-                var generated = Generate(factor.SyntacticPrimary);
-                if (strings.Count == 0)
-                    strings.AddRange(generated);
-                else
+                var temp = new List<string>(strings);
+                strings.Clear();
+
+                foreach (var t in temp)
                 {
-                    for (int k = 0; k < strings.Count; k++)
-                        strings[k] += generated[k];
+                    foreach (var g in generated)
+                        strings.Add(t + g);
                 }
             }
 
