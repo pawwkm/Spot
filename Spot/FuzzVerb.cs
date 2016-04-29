@@ -4,6 +4,7 @@ using Spot.Ebnf;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 namespace Spot
@@ -107,47 +108,33 @@ namespace Spot
             else
                 generator.RecursionDepth = MaxRecursionDepth;
 
-            Collection<string> tests = null;
-            if (StartFrom.Length == 0)
-                tests = generator.Generate(syntax);
-            else
+            var rule = syntax.Start;
+            if (StartFrom != null && StartFrom.Length != 0)
             {
-                var rule = syntax.GetRuleBy(StartFrom);
+                rule = syntax.GetRuleBy(StartFrom);
                 if (rule == null)
                 {
-                    Console.WriteLine("The '{0}' rule doesn't exist in the given syntax.", StartFrom);
+                    Console.WriteLine("The '{0}' rule doesn't exist in the given syntax", StartFrom);
 
                     return 0;
                 }
-
-                tests = generator.Generate(syntax, rule);
             }
 
             if (OutputFile == "")
-                OutputFile = Path.Combine(Path.GetDirectoryName(SyntaxFile), Path.GetFileNameWithoutExtension(SyntaxFile) + ".fuzz.json");
+                OutputFile = Path.Combine(Path.GetDirectoryName(SyntaxFile), Path.GetFileNameWithoutExtension(SyntaxFile) + ".fuzz");
 
-            using (FileStream stream = File.Open(OutputFile, FileMode.Create))
-            {
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    using (JsonWriter jw = new JsonTextWriter(writer))
-                    {
-                        jw.Formatting = Formatting.None;
-
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(jw, tests);
-                    }
-                }
-            }
+            ulong count = 0;
+            using (FileStream stream = new FileStream(OutputFile, FileMode.Create, FileAccess.Write, FileShare.None, 4194304, FileOptions.None))
+                count = generator.Generate(stream, syntax, rule);
 
             if (DisplayTestCount)
             {
-                if (tests.Count == 0)
+                if (count == 0)
                     Console.WriteLine("No tests generated");
-                else if (tests.Count == 1)
+                else if (count == 1)
                     Console.WriteLine("1 test generated");
                 else
-                    Console.WriteLine("{0} tests generated", tests.Count);
+                    Console.WriteLine("{0} tests generated", count);
             }
 
             return 0;
