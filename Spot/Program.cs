@@ -1,6 +1,4 @@
 ﻿using Pote.CommandLine;
-using System;
-using System.Diagnostics;
 
 namespace Spot
 {
@@ -16,18 +14,11 @@ namespace Spot
         /// <returns>The exit code of the verb or command that was executed.</returns>
         private static int Main(string[] args)
         {
-            Stopwatch watch = new Stopwatch();
             var executor = new CommandExecutor();
             executor.AddVerb<TestVerb>()
                     .AddVerb<FuzzVerb>();
 
-            watch.Start();
-            var result = executor.Execute(args);
-            watch.Stop();
-
-            Console.WriteLine("Elapsed time: " + watch.Elapsed);
-
-            return result;
+            return executor.Execute(args);
         }
     }
 }

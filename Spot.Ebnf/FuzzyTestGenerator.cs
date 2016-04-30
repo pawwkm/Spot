@@ -194,20 +194,6 @@ namespace Spot.Ebnf
         }
 
         /// <summary>
-        /// Generates fuzzy tests for the <paramref name="branches"/>.
-        /// </summary>
-        /// <param name="branches">The branches to generate tests for.</param>
-        /// <returns>The generated tests.</returns>
-        private IEnumerable<string> Generate(IList<DefinitionList> branches)
-        {
-            foreach (var branch in branches)
-            {
-                foreach (var fragment in Generate(branch))
-                    yield return fragment;
-            }
-        }
-
-        /// <summary>
         /// Generates fuzzy tests for the <paramref name="list"/>.
         /// </summary>
         /// <param name="list">The list to generate tests for.</param>

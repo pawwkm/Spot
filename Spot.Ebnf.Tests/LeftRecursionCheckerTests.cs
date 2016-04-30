@@ -95,7 +95,7 @@ namespace Spot.Ebnf
         /// is able to detect indirect left recursion in branches.
         /// </summary>
         [Test]
-        public void Check_IndirectLeftRecursionInBeances_Success()
+        public void Check_IndirectLeftRecursionInBranches_Success()
         {
             StringBuilder text = new StringBuilder();
             text.AppendLine("syntax = rule1 ;");

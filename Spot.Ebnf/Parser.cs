@@ -78,7 +78,7 @@ namespace Spot.Ebnf
                 if (source.LookAhead().Text == "|")
                     source.Next();
 
-                rule.Branches.Add(DefinitionList());
+                rule.Branches.AddRange(DefinitionList());
             }
 
             Token<TokenType> endSymbol = source.Next();
@@ -242,11 +242,11 @@ namespace Spot.Ebnf
             if (token.Text.IsOneOf("]", "/)"))
                 throw new ParsingException(token.Position.ToString("The sequence must contain at least 1 syntactic primary."));
 
-            sequence.Branches.Add(DefinitionList());
+            sequence.Branches.AddRange(DefinitionList());
             while (source.LookAhead().Text == "|")
             {
                 source.Next();
-                sequence.Branches.Add(DefinitionList());
+                sequence.Branches.AddRange(DefinitionList());
             }
 
             token = source.Next();
@@ -278,11 +278,11 @@ namespace Spot.Ebnf
             if (token.Text.IsOneOf("}", ":)"))
                 throw new ParsingException(token.Position.ToString("The sequence must contain at least 1 syntactic primary."));
 
-            sequence.Branches.Add(DefinitionList());
+            sequence.Branches.AddRange(DefinitionList());
             while (source.LookAhead().Text == "|")
             {
                 source.Next();
-                sequence.Branches.Add(DefinitionList());
+                sequence.Branches.AddRange(DefinitionList());
             }
 
             token = source.Next();
@@ -314,11 +314,11 @@ namespace Spot.Ebnf
             if (token.Text == ")")
                 throw new ParsingException(token.Position.ToString("The sequence must contain at least 1 syntactic primary."));
 
-            sequence.Branches.Add(DefinitionList());
+            sequence.Branches.AddRange(DefinitionList());
             while (source.LookAhead().Text == "|")
             {
                 source.Next();
-                sequence.Branches.Add(DefinitionList());
+                sequence.Branches.AddRange(DefinitionList());
             }
 
             token = source.Next();
@@ -346,15 +346,12 @@ namespace Spot.Ebnf
             {
                 foreach (var branch in sequence.Branches)
                 {
-                    foreach (var definition in branch)
-                    {
-                        var single = definition as SingleDefinition;
-                        if (single == null)
-                            continue;
+                    var single = branch as SingleDefinition;
+                    if (single == null)
+                        continue;
 
-                        foreach (var term in single.SyntacticTerms)
-                            CheckForReferencesInException(term.Factor);
-                    }
+                    foreach (var term in single.SyntacticTerms)
+                        CheckForReferencesInException(term.Factor);
                 }
             }
         }

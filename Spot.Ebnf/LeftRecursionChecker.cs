@@ -56,12 +56,11 @@ namespace Spot.Ebnf
             {
                 foreach (var branch in sequence.Branches)
                 {
-                    definition = branch[0] as SingleDefinition;
-                    if (definition == null)
-                        continue;
-
-                    foreach (var meta in FindReferences(definition))
-                        yield return meta;
+                    if (branch is SingleDefinition)
+                    {
+                        foreach (var meta in FindReferences(branch as SingleDefinition))
+                            yield return meta;
+                    }
                 }
             }
         }
@@ -86,21 +85,17 @@ namespace Spot.Ebnf
                     continue;
 
                 checkedRules.Add(current);
-                foreach (var branch in current.Branches)
+                foreach (var definition in current.Branches)
                 {
-                    if (branch.Count == 0)
-                        continue;
-
-                    var definition = branch[0] as SingleDefinition;
-                    if (definition == null)
-                        continue;
-
-                    foreach (var meta in FindReferences(definition))
+                    if (definition is SingleDefinition)
                     {
-                        if (rule.MetaIdentifier.Text == meta.Value.Text)
-                            return true;
+                        foreach (var meta in FindReferences(definition as SingleDefinition))
+                        {
+                            if (rule.MetaIdentifier.Text == meta.Value.Text)
+                                return true;
 
-                        rulesToCheck.Push(source.GetRuleBy(meta.Value.Text));
+                            rulesToCheck.Push(source.GetRuleBy(meta.Value.Text));
+                        }
                     }
                 }
             }

@@ -34,9 +34,9 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
+            Assert.AreEqual(1, syntax.Start.Branches.Count);
             
-            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single.SyntacticTerms.Count);
             Assert.Null(single.SyntacticTerms[0].Exception);
 
@@ -70,10 +70,8 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(2, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
-            Assert.AreEqual(1, syntax.Start.Branches[1].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
@@ -81,7 +79,7 @@ namespace Spot.Ebnf
             
             Assert.AreEqual("Abc", ((TerminalString)single1.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
 
-            SingleDefinition single2 = (SingleDefinition)syntax.Start.Branches[1][0];
+            SingleDefinition single2 = (SingleDefinition)syntax.Start.Branches[1];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
@@ -114,9 +112,8 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single.SyntacticTerms.Count);
             Assert.Null(single.SyntacticTerms[0].Exception);
 
@@ -148,9 +145,8 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single.SyntacticTerms.Count);
             Assert.Null(single.SyntacticTerms[0].Exception);
 
@@ -182,9 +178,8 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single.SyntacticTerms.Count);
             Assert.Null(single.SyntacticTerms[0].Exception);
 
@@ -242,16 +237,15 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
             GroupedSequence group = (GroupedSequence)single1.SyntacticTerms[0].Factor.SyntacticPrimary;
-            SingleDefinition single2 = (SingleDefinition)group.Branches[0][0];
+            SingleDefinition single2 = (SingleDefinition)group.Branches[0];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             Assert.Null(single2.SyntacticTerms[0].Exception);
 
@@ -287,16 +281,15 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
             GroupedSequence group = (GroupedSequence)single1.SyntacticTerms[0].Factor.SyntacticPrimary;
-            SingleDefinition single2 = (SingleDefinition)group.Branches[0][0];
+            SingleDefinition single2 = (SingleDefinition)group.Branches[0];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             Assert.Null(single2.SyntacticTerms[0].Exception);
 
@@ -304,7 +297,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
 
-            SingleDefinition single3 = (SingleDefinition)group.Branches[1][0];
+            SingleDefinition single3 = (SingleDefinition)group.Branches[1];
             Assert.AreEqual(1, single3.SyntacticTerms.Count);
             Assert.Null(single3.SyntacticTerms[0].Exception);
 
@@ -338,16 +331,15 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
             OptionalSequence sequence = (OptionalSequence)single1.SyntacticTerms[0].Factor.SyntacticPrimary;
-            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0][0];
+            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             Assert.Null(single2.SyntacticTerms[0].Exception);
 
@@ -383,16 +375,15 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
             OptionalSequence sequence = (OptionalSequence)single1.SyntacticTerms[0].Factor.SyntacticPrimary;
-            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0][0];
+            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             Assert.Null(single2.SyntacticTerms[0].Exception);
 
@@ -400,7 +391,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
 
-            SingleDefinition single3 = (SingleDefinition)sequence.Branches[1][0];
+            SingleDefinition single3 = (SingleDefinition)sequence.Branches[1];
             Assert.AreEqual(1, single3.SyntacticTerms.Count);
             Assert.Null(single3.SyntacticTerms[0].Exception);
 
@@ -434,16 +425,15 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
             RepeatedSequence sequence = (RepeatedSequence)single1.SyntacticTerms[0].Factor.SyntacticPrimary;
-            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0][0];
+            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             Assert.Null(single2.SyntacticTerms[0].Exception);
 
@@ -479,16 +469,15 @@ namespace Spot.Ebnf
             Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
-            Assert.AreEqual(1, syntax.Start.Branches[0].Count);
 
-            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0][0];
+            SingleDefinition single1 = (SingleDefinition)syntax.Start.Branches[0];
             Assert.AreEqual(1, single1.SyntacticTerms.Count);
             Assert.Null(single1.SyntacticTerms[0].Exception);
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
             RepeatedSequence sequence = (RepeatedSequence)single1.SyntacticTerms[0].Factor.SyntacticPrimary;
-            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0][0];
+            SingleDefinition single2 = (SingleDefinition)sequence.Branches[0];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             Assert.Null(single2.SyntacticTerms[0].Exception);
 
@@ -496,7 +485,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
 
-            SingleDefinition single3 = (SingleDefinition)sequence.Branches[1][0];
+            SingleDefinition single3 = (SingleDefinition)sequence.Branches[1];
             Assert.AreEqual(1, single3.SyntacticTerms.Count);
             Assert.Null(single3.SyntacticTerms[0].Exception);
 
