@@ -8,7 +8,7 @@ namespace Spot.Ebnf
     /// <summary>
     /// A syntax rule.
     /// </summary>
-    [DebuggerDisplay("{MetaIdentifier.Text, nq}")]
+    [DebuggerDisplay("{Name, nq}")]
     public sealed class Rule
     {
         private DefinitionList branches = new DefinitionList();
@@ -20,25 +20,20 @@ namespace Spot.Ebnf
         /// <summary>
         /// Initializes a new instance of the <see cref="Rule"/> class.
         /// </summary>
-        /// <param name="metaIdentifier">The name of the rule.</param>
+        /// <param name="name">The name of the rule.</param>
+        /// <param name="position">The position in the source where this rule were defined.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="metaIdentifier"/> is null.
+        /// <paramref name="name"/> or <paramref name="position"/> is null.
         /// </exception>
-        public Rule(Token<TokenType> metaIdentifier)
+        public Rule(string name, InputPosition position)
         {
-            if (metaIdentifier == null)
-                throw new ArgumentNullException(nameof(metaIdentifier));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
+            if (position == null)
+                throw new ArgumentNullException(nameof(position));
 
-            MetaIdentifier = metaIdentifier;
-        }
-
-        /// <summary>
-        /// The name of the rule.
-        /// </summary>
-        public Token<TokenType> MetaIdentifier
-        {
-            get;
-            private set;
+            Name = name;
+            DefinedAt = position;
         }
 
         /// <summary>
@@ -72,6 +67,24 @@ namespace Spot.Ebnf
             {
                 return rulesReferenced;
             }
+        }
+
+        /// <summary>
+        /// The position in the source where this rule were defined.
+        /// </summary>
+        public InputPosition DefinedAt
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// The name of the rule.
+        /// </summary>
+        public string Name
+        {
+            get;
+            private set;
         }
     }
 }

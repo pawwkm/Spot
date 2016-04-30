@@ -170,7 +170,7 @@ namespace Spot.Ebnf
         /// <returns>The generated tests.</returns>
         private static IEnumerable<string> Generate(TerminalString terminal)
         {
-            yield return terminal.Value.Text;
+            yield return terminal.Value;
         }
 
         /// <summary>
@@ -357,19 +357,19 @@ namespace Spot.Ebnf
             ISpecialSequenceGenerator selected = null;
             foreach (var validator in SpecialSequenceGenerator)
             {
-                if (validator.IsValid(sequence.Value.Text))
+                if (validator.IsValid(sequence.Value))
                 {
                     if (selected != null)
-                        throw new SpecialSequenceException(sequence.Value.Position.ToString("Ambiguous special sequence."));
+                        throw new SpecialSequenceException(sequence.DefinedAt.ToString("Ambiguous special sequence."));
                     else
                         selected = validator;
                 }
             }
 
             if (selected == null)
-                throw new SpecialSequenceException(sequence.Value.Position.ToString("No generator defined for the special sequence"));
+                throw new SpecialSequenceException(sequence.DefinedAt.ToString("No generator defined for the special sequence."));
 
-            return new List<string>(selected.Generate(sequence.Value.Text));
+            return selected.Generate(sequence.Value);
         }
 
         /// <summary>
@@ -380,13 +380,13 @@ namespace Spot.Ebnf
         private IEnumerable<string> Generate(MetaIdentifier identifier)
         {
             var rule = (from r in source
-                        where r.MetaIdentifier.Text == identifier.Value.Text
+                        where r.Name == identifier.Name
                         select r).FirstOrDefault();
 
             if (rule == null)
             {
                 string message = "Referencing an undefined rule.";
-                throw new UndefinedRuleException(identifier.Value.Position.ToString(message));
+                throw new UndefinedRuleException(identifier.DefinedAt.ToString(message));
             }
 
             return Generate(rule);

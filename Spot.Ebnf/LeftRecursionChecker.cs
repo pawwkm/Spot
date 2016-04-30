@@ -91,10 +91,10 @@ namespace Spot.Ebnf
                     {
                         foreach (var meta in FindReferences(definition as SingleDefinition))
                         {
-                            if (rule.MetaIdentifier.Text == meta.Value.Text)
+                            if (rule.Name == meta.Name)
                                 return true;
 
-                            rulesToCheck.Push(source.GetRuleBy(meta.Value.Text));
+                            rulesToCheck.Push(source.GetRuleBy(meta.Name));
                         }
                     }
                 }

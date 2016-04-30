@@ -42,8 +42,8 @@ namespace Spot.Ebnf
                     break;
 
                 Rule rule = Rule();
-                if (rules.Any(x => x.MetaIdentifier.Text == rule.MetaIdentifier.Text))
-                    throw new ParsingException(rule.MetaIdentifier.Position.ToString("Rule '" + rule.MetaIdentifier.Text + "' is redefined."));
+                if (rules.Any(x => x.Name == rule.Name))
+                    throw new ParsingException(rule.DefinedAt.ToString("Rule '" + rule.Name + "' is redefined."));
 
                 rules.Add(rule);
             }
@@ -64,7 +64,7 @@ namespace Spot.Ebnf
             if (identifier.Type != TokenType.MetaIdentifier)
                 throw new ParsingException(identifier.Position.ToString("Expected a meta identifier."));
 
-            Rule rule = new Rule(identifier);
+            Rule rule = new Rule(identifier.Text, identifier.Position);
 
             Token<TokenType> equal = source.Next();
             if (equal.Text != equal.Text)
@@ -118,7 +118,7 @@ namespace Spot.Ebnf
         /// </remarks>
         private SingleDefinition SingleDefinition()
         {
-            SingleDefinition definition = new SingleDefinition();
+            SingleDefinition definition = new SingleDefinition(source.LookAhead().Position);
 
             definition.SyntacticTerms.Add(SyntacticTerm());
             while (source.LookAhead().Text == ",")
@@ -139,7 +139,7 @@ namespace Spot.Ebnf
         /// </remarks>
         private SyntacticTerm SyntacticTerm()
         {
-            SyntacticTerm term = new SyntacticTerm(SyntacticFactor());
+            SyntacticTerm term = new SyntacticTerm(SyntacticFactor(), source.LookAhead().Position);
             if (source.LookAhead().Text == "-")
             {
                 source.Next();
@@ -183,10 +183,10 @@ namespace Spot.Ebnf
                 if (token.Text != "*")
                     throw new ParsingException(token.Position.ToString("Expected repetition symbol (*)."));
 
-                return new SyntacticFactor(SyntacticPrimary(), repetitions);
+                return new SyntacticFactor(SyntacticPrimary(), token.Position, repetitions);
             }
             
-            return new SyntacticFactor(SyntacticPrimary());
+            return new SyntacticFactor(SyntacticPrimary(), token.Position);
         }
 
         /// <summary>
@@ -199,12 +199,14 @@ namespace Spot.Ebnf
         private Definition SyntacticPrimary()
         {
             Token<TokenType> token = source.LookAhead();
+            Definition definition = null;
+
             if (token.Type == TokenType.MetaIdentifier)
-                return new MetaIdentifier(source.Next());
+                definition = new MetaIdentifier(token.Text, token.Position);
             else if (token.Type == TokenType.TerminalString)
-                return new TerminalString(source.Next());
+                definition = new TerminalString(token.Text, token.Position);
             else if (token.Type == TokenType.SpecialSequence)
-                return new SpecialSequence(source.Next());
+                definition = new SpecialSequence(token.Text, token.Position);
             else if (token.Text.IsOneOf("[", "(/"))
                 return OptionalSequence();
             else if (token.Text.IsOneOf("{", "(:"))
@@ -212,12 +214,13 @@ namespace Spot.Ebnf
             else if (token.Text == "(")
                 return GroupedSequence();
             else if (token.Text == ";")
-            {
-                source.Next();
-                return new EmptySequence();
-            }
+                definition = new EmptySequence(token.Position);
             else
                 throw new ParsingException(token.Position.ToString("Expected a syntactic primary"));
+
+            source.Next();
+
+            return definition;
         }
 
         /// <summary>
@@ -232,9 +235,9 @@ namespace Spot.Ebnf
         /// </exception>
         private OptionalSequence OptionalSequence()
         {
-            OptionalSequence sequence = new OptionalSequence();
-
             Token<TokenType> token = source.Next();
+            OptionalSequence sequence = new OptionalSequence(token.Position);
+
             if (!token.Text.IsOneOf("[", "(/"))
                 throw new ParsingException(token.Position.ToString("Expected optional sequence start symbol."));
 
@@ -268,9 +271,9 @@ namespace Spot.Ebnf
         /// </exception>
         private RepeatedSequence RepeatedSequence()
         {
-            RepeatedSequence sequence = new RepeatedSequence();
-
             Token<TokenType> token = source.Next();
+            RepeatedSequence sequence = new RepeatedSequence(token.Position);
+
             if (!token.Text.IsOneOf("{", "(:"))
                 throw new ParsingException(token.Position.ToString("Expected repeat sequence start symbol."));
 
@@ -304,9 +307,9 @@ namespace Spot.Ebnf
         /// </exception>
         private GroupedSequence GroupedSequence()
         {
-            GroupedSequence sequence = new GroupedSequence();
-
             Token<TokenType> token = source.Next();
+            GroupedSequence sequence = new GroupedSequence(token.Position);
+
             if (token.Text != "(")
                 throw new ParsingException(token.Position.ToString("Expected group sequence start symbol."));
 
@@ -339,7 +342,7 @@ namespace Spot.Ebnf
         {
             var identifier = factor.SyntacticPrimary as MetaIdentifier;
             if (identifier != null)
-                throw new ParsingException(identifier.Value.Position.ToString("Rule '" + identifier.Value.Text + "' referenced in exception."));
+                throw new ParsingException(identifier.DefinedAt.ToString("Rule '" + identifier.Name + "' referenced in exception."));
 
             var sequence = factor.SyntacticPrimary as Sequence;
             if (sequence != null)

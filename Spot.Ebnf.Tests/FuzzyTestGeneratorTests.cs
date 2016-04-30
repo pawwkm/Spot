@@ -329,7 +329,7 @@ namespace Spot.Ebnf
 
             var sequence = Substitute.For<ISpecialSequenceGenerator>();
             sequence.IsValid(" digit ").Returns(true);
-            sequence.Generate(" digit ").Returns(new Collection<string>(expected));
+            sequence.Generate(" digit ").Returns(expected);
 
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
