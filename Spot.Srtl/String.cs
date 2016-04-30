@@ -4,7 +4,7 @@ using System;
 namespace Spot.SrtL
 {
     /// <summary>
-    /// 
+    /// A SrtL string.
     /// </summary>
     public sealed class String
     {

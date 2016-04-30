@@ -2,8 +2,10 @@
 using Pote.Collections;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Spot.Ebnf
 {
@@ -19,6 +21,8 @@ namespace Spot.Ebnf
         private Dictionary<Rule, int> depth = new Dictionary<Rule, int>();
 
         private Syntax source;
+
+        private Stream stream;
 
         private IList<ISpecialSequenceGenerator> specialSequenceGenerator = new List<ISpecialSequenceGenerator>();
 
@@ -89,31 +93,37 @@ namespace Spot.Ebnf
         /// <summary>
         /// Generates fuzzy tests for the <paramref name="syntax"/>.
         /// </summary>
+        /// <param name="output">Where the fuzz tests are written to.</param>
         /// <param name="syntax">The syntax to generate tests for.</param>
-        /// <returns>The generated tests.</returns>
+        /// <returns>The number of tests generated.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="syntax"/> is null.
+        /// <paramref name="output"/> or <paramref name="syntax"/> is null.
         /// </exception>
         /// <exception cref="SpecialSequenceException">
         /// The <paramref name="syntax"/> contains an erroneous special sequence.
         /// </exception>
-        public Collection<string> Generate(Syntax syntax)
+        public ulong Generate(Stream output, Syntax syntax)
         {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
+
             if (syntax == null)
                 throw new ArgumentNullException(nameof(syntax));
 
-            return Generate(syntax, syntax.Start);
+            return Generate(output, syntax, syntax.Start);
         }
 
         /// <summary>
         /// Generates fuzzy tests for the <paramref name="syntax"/> starting
         /// from the given <paramref name="rule"/>.
         /// </summary>
+        /// <param name="output">Where the fuzz tests are written to.</param>
         /// <param name="syntax">The syntax to generate tests for.</param>
         /// <param name="rule">The rule to start generating test from.</param>
-        /// <returns>The generated tests.</returns>
+        /// <returns>The number of tests generated.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="syntax"/> or <paramref name="rule"/> is null.
+        /// <paramref name="output"/>, <paramref name="syntax"/> or 
+        /// <paramref name="rule"/> is null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="rule"/> is not defined in the <paramref name="syntax"/>.
@@ -121,8 +131,10 @@ namespace Spot.Ebnf
         /// <exception cref="SpecialSequenceException">
         /// The <paramref name="syntax"/> contains an erroneous special sequence.
         /// </exception>
-        public Collection<string> Generate(Syntax syntax, Rule rule)
+        public ulong Generate(Stream output, Syntax syntax, Rule rule)
         {
+            if (output == null)
+                throw new ArgumentNullException(nameof(output));
             if (syntax == null)
                 throw new ArgumentNullException(nameof(syntax));
             if (rule == null)
@@ -132,7 +144,23 @@ namespace Spot.Ebnf
                 throw new ArgumentException("The rule is not part of the syntax");
 
             source = syntax;
-            return new Collection<string>(Generate(rule));
+            stream = output;
+
+            ulong count = 0;
+            foreach (var test in Generate(syntax.Start))
+            {
+                ushort length = (ushort)test.Length;
+
+                var bytes = BitConverter.GetBytes(length);
+                stream.Write(bytes, 0, bytes.Length);
+
+                bytes = Encoding.UTF8.GetBytes(test);
+                stream.Write(bytes, 0, bytes.Length);
+
+                count++;
+            }
+
+            return count;
         }
 
         /// <summary>
@@ -140,9 +168,9 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="terminal">The terminal to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private static List<string> Generate(TerminalString terminal)
+        private static IEnumerable<string> Generate(TerminalString terminal)
         {
-            return new List<string>() { terminal.Value.Text };
+            yield return terminal.Value.Text;
         }
 
         /// <summary>
@@ -150,19 +178,19 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="rule">The rule to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(Rule rule)
+        private IEnumerable<string> Generate(Rule rule)
         {
             if (!depth.ContainsKey(rule))
                 depth[rule] = 0;
 
-            if (depth[rule] == RecursionDepth)
-                return new List<string>();
+            if (depth[rule] != RecursionDepth)
+            {
+                depth[rule]++;
+                foreach (var fragment in Generate(rule.Branches))
+                    yield return fragment;
 
-            depth[rule]++;
-            var strings = Generate(rule.Branches);
-            depth[rule]--;
-
-            return strings;
+                depth[rule]--;
+            }
         }
 
         /// <summary>
@@ -170,13 +198,13 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="branches">The branches to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(IList<DefinitionList> branches)
+        private IEnumerable<string> Generate(IList<DefinitionList> branches)
         {
-            var strings = new List<string>();
             foreach (var branch in branches)
-                strings.AddRange(Generate(branch));
-
-            return strings;
+            {
+                foreach (var fragment in Generate(branch))
+                    yield return fragment;
+            }
         }
 
         /// <summary>
@@ -184,13 +212,13 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="list">The list to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(DefinitionList list)
+        private IEnumerable<string> Generate(DefinitionList list)
         {
-            var strings = new List<string>();
             foreach (var definition in list)
-                strings.AddRange(Generate(definition));
-
-            return strings;
+            {
+                foreach (var fragment in Generate(definition))
+                    yield return fragment;
+            }
         }
 
         /// <summary>
@@ -198,28 +226,50 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="definition">The definition to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(SingleDefinition definition)
+        private IEnumerable<string> Generate(SingleDefinition definition)
         {
-            var strings = new List<string>();
-            for (int i = definition.SyntacticTerms.Count; i > 0; i--)
+            IEnumerable<string> fragments = null;
+            foreach (var term in definition.SyntacticTerms.Reverse())
             {
-                var temp = new List<string>(strings);
-                var generated = Generate(definition.SyntacticTerms[i - 1]);
-
-                if (strings.Count == 0)
-                    strings.AddRange(generated);
+                if (fragments == null)
+                    fragments = Generate(term);
                 else
-                {
-                    strings.Clear();
-                    foreach (var t in temp)
-                    {
-                        foreach (var g in generated)
-                            strings.Add(g + t);
-                    }
-                }
+                    fragments = Combine(Generate(term), fragments);
             }
 
-            return strings;
+            return fragments;
+        }
+
+        /// <summary>
+        /// Calculates all the combinations of <paramref name="left"/> and <paramref name="right"/>
+        /// but, they do not change position.
+        /// </summary>
+        /// <param name="left">The left hand side.</param>
+        /// <param name="right">The right hand side.</param>
+        /// <returns>All the combinations of <paramref name="left"/> and <paramref name="right"/>.</returns>
+        private IEnumerable<string> Combine(IEnumerable<string> left, IEnumerable<string> right)
+        {
+            foreach (var l in left)
+            {
+                foreach (var r in right)
+                    yield return l + r;
+            }
+        }
+
+        /// <summary>
+        /// Enumerates <paramref name="a"/> and <paramref name="b"/> as if they were
+        /// one list consisting of <paramref name="a"/>'s elements then <paramref name="b"/>'s elements.
+        /// </summary>
+        /// <param name="a">The first list.</param>
+        /// <param name="b">The second list.</param>
+        /// <returns>A merged version of <paramref name="a"/> and <paramref name="b"/>.</returns>
+        private IEnumerable<string> Merge(IEnumerable<string> a, IEnumerable<string> b)
+        {
+            foreach (var value in a)
+                yield return value;
+
+            foreach (var value in b)
+                yield return value;
         }
 
         /// <summary>
@@ -227,31 +277,22 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="term">The term to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(SyntacticTerm term)
+        private IEnumerable<string> Generate(SyntacticTerm term)
         {
-            var generated = Generate(term.Factor);
-            if (term.Exception != null)
+            if (term.Exception == null)
+            {
+                foreach (var fragment in Generate(term.Factor))
+                    yield return fragment;
+            }
+            else
             {
                 var exceptions = Generate(term.Exception);
-                var excluded = new List<int>();
-
-                for (var i = 0; i < generated.Count; i++)
+                foreach (var fragment in Generate(term.Factor))
                 {
-                    for (var k = 0; k < exceptions.Count; k++)
-                    {
-                        if (exceptions[k] == generated[i])
-                        {
-                            if (!excluded.Contains(i))
-                                excluded.Add(i);
-                        }
-                    }
+                    if (!exceptions.Contains(fragment))
+                        yield return fragment;
                 }
-
-                foreach (var index in excluded)
-                    generated.RemoveAt(index);
             }
-
-            return generated;
         }
 
         /// <summary>
@@ -259,24 +300,13 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="factor">The factor to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(SyntacticFactor factor)
+        private IEnumerable<string> Generate(SyntacticFactor factor)
         {
-            var generated = Generate(factor.SyntacticPrimary);
-
-            var strings = new List<string>(generated);
+            var fragments = Generate(factor.SyntacticPrimary);
             for (var i = 1; i < factor.NumberOfRepetitions; i++)
-            {
-                var temp = new List<string>(strings);
-                strings.Clear();
+                fragments = Combine(Generate(factor.SyntacticPrimary), fragments);
 
-                foreach (var t in temp)
-                {
-                    foreach (var g in generated)
-                        strings.Add(t + g);
-                }
-            }
-
-            return strings;
+            return fragments;
         }
 
         /// <summary>
@@ -284,7 +314,7 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="definition">The branches to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(Definition definition)
+        private IEnumerable<string> Generate(Definition definition)
         {
             return Generate((dynamic)definition);
         }
@@ -294,7 +324,7 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="sequence">The sequence to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(GroupedSequence sequence)
+        private IEnumerable<string> Generate(GroupedSequence sequence)
         {
             return Generate(sequence.Branches);
         }
@@ -304,15 +334,13 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="sequence">The sequence to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(OptionalSequence sequence)
+        private IEnumerable<string> Generate(OptionalSequence sequence)
         {
-            var strings = new List<string>();
-
             // This is the path when the optional string is not generated.
-            strings.Add("");
-            strings.AddRange(Generate(sequence.Branches));
+            yield return "";
 
-            return strings;
+            foreach (var fragment in Generate(sequence.Branches))
+                yield return fragment;
         }
 
         /// <summary>
@@ -320,18 +348,14 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="sequence">The sequence to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(RepeatedSequence sequence)
+        private IEnumerable<string> Generate(RepeatedSequence sequence)
         {
-            var strings = new List<string>();
-
-            var generated = new List<string>();
+            IEnumerable<string> fragments = new string[0];
             foreach (var branch in sequence.Branches)
-                generated.AddRange(Generate(branch));
+                fragments = Merge(fragments, Generate(branch));
 
-            foreach (var combination in generated.Combinations(Repetitions))
-                strings.Add(combination.Join());
-
-            return strings;
+            foreach (var combination in fragments.Combinations(Repetitions))
+                yield return combination.Join();
         }
 
         /// <summary>
@@ -342,7 +366,7 @@ namespace Spot.Ebnf
         /// <exception cref="SpecialSequenceException">
         /// There is an error in the given <paramref name="sequence"/>.
         /// </exception>
-        private List<string> Generate(SpecialSequence sequence)
+        private IEnumerable<string> Generate(SpecialSequence sequence)
         {
             ISpecialSequenceGenerator selected = null;
             foreach (var validator in SpecialSequenceGenerator)
@@ -367,7 +391,7 @@ namespace Spot.Ebnf
         /// </summary>
         /// <param name="identifier">The identifier to generate tests for.</param>
         /// <returns>The generated tests.</returns>
-        private List<string> Generate(MetaIdentifier identifier)
+        private IEnumerable<string> Generate(MetaIdentifier identifier)
         {
             var rule = (from r in source
                         where r.MetaIdentifier.Text == identifier.Value.Text
