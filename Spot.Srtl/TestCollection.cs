@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Spot.SrtL
 {
     /// <summary>
-    /// 
+    /// A collection of SrtL tests.
     /// </summary>
     public class TestCollection : IEnumerable<Test>
     {

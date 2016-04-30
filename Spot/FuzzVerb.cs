@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json;
-using Pote.CommandLine;
+﻿using Pote.CommandLine;
 using Spot.Ebnf;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 
 namespace Spot
 {

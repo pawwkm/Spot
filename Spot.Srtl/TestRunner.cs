@@ -12,7 +12,7 @@ namespace Spot.SrtL
         private TextWriter output;
 
         /// <summary>
-        /// Initializes new instance of the <see cref="TestRunner"/> class.
+        /// Initializes a new instance of the <see cref="TestRunner"/> class.
         /// </summary>
         /// <param name="writer">The output to write to.</param>
         /// <exception cref="ArgumentNullException">
@@ -37,7 +37,7 @@ namespace Spot.SrtL
                 throw new ArgumentNullException(nameof(tests));
 
             if (tests.Errors.Count != 0)
-                throw new ArgumentException("The tests have errors. Check " + nameof(tests.Errors) , nameof(tests));
+                throw new ArgumentException("The tests have errors. Check " + nameof(tests.Errors), nameof(tests));
 
             var validator = new SyntaxValidator(syntax);
             foreach (var t in tests)

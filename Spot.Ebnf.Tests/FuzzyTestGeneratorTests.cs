@@ -347,7 +347,7 @@ namespace Spot.Ebnf
 
         /// <summary>
         /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
-        /// generates all the variations of a rule consisting defintion list 
+        /// generates all the variations of a rule consisting definition list 
         /// of the same rule repeated three times.
         /// </summary>
         [Test]
@@ -382,7 +382,7 @@ namespace Spot.Ebnf
 
         /// <summary>
         /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
-        /// generates all the variations of a rule consisting defintion list 
+        /// generates all the variations of a rule consisting definition list 
         /// of the same rule repeated three times using the '*' symbol.
         /// </summary>
         [Test]
@@ -417,8 +417,8 @@ namespace Spot.Ebnf
 
         /// <summary>
         /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
-        /// generates all the variations of a rule consisting defintion list 
-        /// of indenticle branched groups of terminals.
+        /// generates all the variations of a rule consisting definition list 
+        /// of identical branched groups of terminals.
         /// </summary>
         [Test]
         public void Generate_3IndenticleBranchedGroups_Success()
@@ -453,7 +453,7 @@ namespace Spot.Ebnf
 
         /// <summary>
         /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
-        /// generates all the variations of a rule consisting defintion list 
+        /// generates all the variations of a rule consisting definition list 
         /// of two rules. The first has less branches than the second.
         /// </summary>
         [Test]
@@ -486,7 +486,7 @@ namespace Spot.Ebnf
 
         /// <summary>
         /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
-        /// generates all the variations of a rule consisting defintion list 
+        /// generates all the variations of a rule consisting definition list 
         /// of two rules. The first has more branches than the second.
         /// </summary>
         [Test]

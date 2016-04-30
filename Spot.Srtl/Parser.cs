@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Pote;
 using Pote.Text;
-using Pote;
+using System;
 
 namespace Spot.SrtL
 {

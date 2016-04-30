@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Spot.Ebnf
 {
@@ -22,8 +23,6 @@ namespace Spot.Ebnf
         private Syntax source;
 
         private Stream stream;
-
-        private List<Definition> endPoints = new List<Definition>();
 
         private IList<ISpecialSequenceGenerator> specialSequenceGenerator = new List<ISpecialSequenceGenerator>();
 
@@ -235,13 +234,20 @@ namespace Spot.Ebnf
                 if (fragments == null)
                     fragments = Generate(term);
                 else
-                    fragments = Cock(Generate(term), fragments);
+                    fragments = Combine(Generate(term), fragments);
             }
 
             return fragments;
         }
 
-        private IEnumerable<string> Cock(IEnumerable<string> left, IEnumerable<string> right)
+        /// <summary>
+        /// Calculates all the combinations of <paramref name="left"/> and <paramref name="right"/>
+        /// but, they do not change position.
+        /// </summary>
+        /// <param name="left">The left hand side.</param>
+        /// <param name="right">The right hand side.</param>
+        /// <returns>All the combinations of <paramref name="left"/> and <paramref name="right"/>.</returns>
+        private IEnumerable<string> Combine(IEnumerable<string> left, IEnumerable<string> right)
         {
             foreach (var l in left)
             {
@@ -250,6 +256,13 @@ namespace Spot.Ebnf
             }
         }
 
+        /// <summary>
+        /// Enumerates <paramref name="a"/> and <paramref name="b"/> as if they were
+        /// one list consisting of <paramref name="a"/>'s elements then <paramref name="b"/>'s elements.
+        /// </summary>
+        /// <param name="a">The first list.</param>
+        /// <param name="b">The second list.</param>
+        /// <returns>A merged version of <paramref name="a"/> and <paramref name="b"/>.</returns>
         private IEnumerable<string> Merge(IEnumerable<string> a, IEnumerable<string> b)
         {
             foreach (var value in a)
@@ -291,7 +304,7 @@ namespace Spot.Ebnf
         {
             var fragments = Generate(factor.SyntacticPrimary);
             for (var i = 1; i < factor.NumberOfRepetitions; i++)
-                fragments = Cock(Generate(factor.SyntacticPrimary), fragments);
+                fragments = Combine(Generate(factor.SyntacticPrimary), fragments);
 
             return fragments;
         }

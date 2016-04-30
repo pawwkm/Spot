@@ -11,6 +11,17 @@ namespace Spot.SrtL
         private List<String> strings = new List<String>();
 
         /// <summary>
+        /// The strings that make up this concatenated string.
+        /// </summary>
+        public IList<String> Strings
+        {
+            get
+            {
+                return strings;
+            }
+        }
+
+        /// <summary>
         /// Returns the concatenated value of <see cref="Strings"/>.
         /// </summary>
         /// <returns>The concatenated value of <see cref="Strings"/>.</returns>
@@ -21,17 +32,6 @@ namespace Spot.SrtL
                 builder.Append(s.Content);
 
             return builder.ToString();
-        }
-
-        /// <summary>
-        /// The strings that make up this concatenated string.
-        /// </summary>
-        public IList<String> Strings
-        {
-            get
-            {
-                return strings;
-            }
         }
     }
 }

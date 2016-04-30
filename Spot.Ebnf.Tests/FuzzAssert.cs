@@ -33,6 +33,11 @@ namespace Spot.Ebnf
             CollectionAssert.AreEqual(expected, GetTests(actual));
         }
 
+        /// <summary>
+        /// Extracts the tests from a stream.
+        /// </summary>
+        /// <param name="actual">The stream to extract tests from.</param>
+        /// <returns>The extracted tests.</returns>
         private static List<string> GetTests(MemoryStream actual)
         {
             var list = new List<string>();
