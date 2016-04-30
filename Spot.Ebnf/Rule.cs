@@ -11,7 +11,7 @@ namespace Spot.Ebnf
     [DebuggerDisplay("{MetaIdentifier.Text, nq}")]
     public sealed class Rule
     {
-        private List<DefinitionList> definitions = new List<DefinitionList>();
+        private DefinitionList branches = new DefinitionList();
 
         private List<Rule> referencedBy = new List<Rule>();
 
@@ -44,11 +44,11 @@ namespace Spot.Ebnf
         /// <summary>
         /// The branches of the rule.
         /// </summary>
-        public IList<DefinitionList> Branches
+        public DefinitionList Branches
         {
             get
             {
-                return definitions;
+                return branches;
             }
         }
 

@@ -561,8 +561,8 @@ namespace Spot.Ebnf
         /// <returns>True if the source conforms to the <paramref name="sequence"/>; otherwise false.</returns>
         private bool Validate(RepeatedSequence sequence)
         {
-            var dictionary = new Dictionary<DefinitionList, SyntaxPath>();
-            foreach (DefinitionList branch in sequence.Branches)
+            var dictionary = new Dictionary<Definition, SyntaxPath>();
+            foreach (var branch in sequence.Branches)
                 dictionary.Add(branch, Path.DeepCopy());
 
             bool isValid;

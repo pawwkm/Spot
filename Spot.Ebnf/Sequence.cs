@@ -7,12 +7,12 @@ namespace Spot.Ebnf
     /// </summary>
     public abstract class Sequence : Definition
     {
-        private List<DefinitionList> branches = new List<DefinitionList>();
+        private DefinitionList branches = new DefinitionList();
 
         /// <summary>
         /// The possible branches in this sequence.
         /// </summary>
-        public IList<DefinitionList> Branches
+        public DefinitionList Branches
         {
             get
             {

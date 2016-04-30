@@ -116,7 +116,7 @@ namespace Spot.Ebnf
                 references.Add(rule, new List<string>());
                 foreach (var r in source)
                 {
-                    foreach (DefinitionList l in r.Branches)
+                    foreach (var l in r.Branches)
                     {
                         if (FindReferences(l, rule.MetaIdentifier.Text))
                             references[rule].Add(r.MetaIdentifier.Text);
@@ -241,9 +241,9 @@ namespace Spot.Ebnf
         /// </returns>
         private bool FindReferences(Sequence sequence, string name)
         {
-            foreach (DefinitionList list in sequence.Branches)
+            foreach (var branch in sequence.Branches)
             {
-                if (FindReferences(list, name))
+                if (FindReferences(branch, name))
                     return true;
             }
 
