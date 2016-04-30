@@ -50,6 +50,9 @@ namespace Spot.SrtL
 
             Test test = new Test();
             test.DefinedAt = token.Position;
+            if (analyzer.LookAhead().Text == "description")
+                test.Description = Description();
+
             test.Input = Input();
             test.Validity = Validity();
 
@@ -75,6 +78,54 @@ namespace Spot.SrtL
             }
 
             return new Input();
+        }
+
+        private Description Description()
+        {
+            IssueErrorUntil("description", "Expected 'description' keyword.");
+
+            return new Description(analyzer.Next().Position, ConcatenatedString());
+        }
+
+        /// <summary>
+        /// Parses the validity of a test.
+        /// </summary>
+        /// <returns>
+        /// True if the test is declared to be valid; 
+        /// otherwise false
+        /// </returns>
+        private Validity Validity()
+        {
+            IssueErrorUntil("is", "Expected 'is' keyword.");
+
+            var token = analyzer.Next();
+            if (token.Type == TokenType.EndOfInput)
+            {
+                result.Errors.Add(token.Position.ToString("Unexpected end of input."));
+                return new Validity();
+            }
+
+            var validity = new Validity();
+            validity.DefinedAt = token.Position;
+            validity.IsValid = true;
+
+            token = analyzer.LookAhead();
+            if (token.Text == "not")
+            {
+                analyzer.Next();
+                validity.IsValid = false;
+            }
+
+            IssueErrorUntil("valid", "Expected 'valid' keyword.");
+
+            token = analyzer.Next();
+            if (token.Type == TokenType.EndOfInput)
+            {
+                result.Errors.Add(token.Position.ToString("Unexpected end of input."));
+                return new Validity();
+            }
+
+            return validity;
         }
 
         /// <summary>
@@ -119,47 +170,6 @@ namespace Spot.SrtL
             s.DefinedAt = token.Position;
 
             return s;
-        }
-
-        /// <summary>
-        /// Parses the validity of a test.
-        /// </summary>
-        /// <returns>
-        /// True if the test is declared to be valid; 
-        /// otherwise false
-        /// </returns>
-        private Validity Validity()
-        {
-            IssueErrorUntil("is", "Expected 'is' keyword.");
-
-            var token = analyzer.Next();
-            if (token.Type == TokenType.EndOfInput)
-            {
-                result.Errors.Add(token.Position.ToString("Unexpected end of input."));
-                return new Validity();
-            }
-
-            var validity = new Validity();
-            validity.DefinedAt = token.Position;
-            validity.IsValid = true;
-
-            token = analyzer.LookAhead();
-            if (token.Text == "not")
-            {
-                analyzer.Next();
-                validity.IsValid = false;
-            }
-
-            IssueErrorUntil("valid", "Expected 'valid' keyword.");
-
-            token = analyzer.Next();
-            if (token.Type == TokenType.EndOfInput)
-            {
-                result.Errors.Add(token.Position.ToString("Unexpected end of input."));
-                return new Validity();
-            }
-
-            return validity;
         }
 
         /// <summary>
