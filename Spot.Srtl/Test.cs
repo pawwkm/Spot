@@ -15,6 +15,16 @@ namespace Spot.SrtL
         private InputPosition definedAt = new InputPosition();
 
         /// <summary>
+        /// The description of the test. 
+        /// If the test doesn't have a description, this is null.
+        /// </summary>
+        public Description Description
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// The input to test against a given syntax.
         /// </summary>
         /// <exception cref="ArgumentNullException">

@@ -47,6 +47,18 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// Creates a token of the 'description' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder Description()
+        {
+            var token = Token("description", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\tdescription ");
+
+            return token;
+        }
+
+        /// <summary>
         /// Creates a token of the 'input' keyword.
         /// </summary>
         /// <returns>This builder.</returns>

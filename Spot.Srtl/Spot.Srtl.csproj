@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcatenatedString.cs" />
+    <Compile Include="Description.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="LexicalAnalyzer.cs" />
     <Compile Include="Parser.cs" />

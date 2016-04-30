@@ -37,6 +37,8 @@ namespace Spot.SrtL
             Assert.AreEqual(1, test.DefinedAt.Line);
             Assert.AreEqual(1, test.DefinedAt.Column);
 
+            Assert.IsNull(test.Description);
+
             Assert.AreEqual(2, test.Input.DefinedAt.Line);
             Assert.AreEqual(1, test.Input.DefinedAt.Column);
 
@@ -76,6 +78,8 @@ namespace Spot.SrtL
             Assert.AreEqual(1, test.DefinedAt.Line);
             Assert.AreEqual(1, test.DefinedAt.Column);
 
+            Assert.IsNull(test.Description);
+
             Assert.AreEqual(2, test.Input.DefinedAt.Line);
             Assert.AreEqual(1, test.Input.DefinedAt.Column);
 
@@ -114,6 +118,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
+            Assert.IsNull(test.Description);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -144,6 +149,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
+            Assert.IsNull(test.Description);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -173,6 +179,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
+            Assert.IsNull(test.Description);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -202,6 +209,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
+            Assert.IsNull(test.Description);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -231,8 +239,53 @@ namespace Spot.SrtL
             Assert.AreEqual(1, tests.Length);
 
             var test = tests[0];
+            Assert.IsNull(test.Description);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
+            Assert.True(test.Validity.IsValid);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="Parser.Parse(LexicalAnalyzer{TokenType})"/> 
+        /// can parse a test consisting of a description, some input and the validity 
+        /// set to true.
+        /// </summary>
+        [Test]
+        public void Parse_TestWithDescription_TestParses()
+        {
+            var builder = new TokenBuilder();
+            var tokens = builder.Test()
+                                .Description().String("This tests something.")
+                                .Input().String("Abc")
+                                .Is().Valid()
+                                .Build();
+
+            var parser = new Parser();
+            var result = parser.Parse(LexicalAnalyzer(tokens));
+
+            Assert.AreEqual(0, result.Errors.Count);
+
+            var tests = result.ToArray();
+            Assert.AreEqual(1, tests.Length);
+
+            var test = tests[0];
+            Assert.AreEqual(1, test.DefinedAt.Line);
+            Assert.AreEqual(1, test.DefinedAt.Column);
+
+            Assert.AreEqual(2, test.Description.DefinedAt.Line);
+            Assert.AreEqual(1, test.Description.DefinedAt.Column);
+            Assert.AreEqual("This tests something.", test.Description.Text.Concatenate());
+
+            Assert.AreEqual(2, test.Input.DefinedAt.Line);
+            Assert.AreEqual(37, test.Input.DefinedAt.Column);
+
+            Assert.AreEqual(1, test.Input.Contents.Strings.Count);
+            Assert.AreEqual(2, test.Input.Contents.Strings[0].DefinedAt.Line);
+            Assert.AreEqual(44, test.Input.Contents.Strings[0].DefinedAt.Column);
+            Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
+
+            Assert.AreEqual(2, test.Validity.DefinedAt.Line);
+            Assert.AreEqual(49, test.Validity.DefinedAt.Column);
             Assert.True(test.Validity.IsValid);
         }
 
