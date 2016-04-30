@@ -107,6 +107,30 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// Creates a token of the 'start' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder Start()
+        {
+            var token = Token("start", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\tstart");
+
+            return token;
+        }
+
+        /// <summary>
+        /// Creates a token of the 'from' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder From()
+        {
+            var token = Token("from", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\tfrom");
+
+            return token;
+        }
+
+        /// <summary>
         /// Creates a string token.
         /// </summary>
         /// <param name="text">The content of the string.</param>

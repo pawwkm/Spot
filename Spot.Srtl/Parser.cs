@@ -50,13 +50,28 @@ namespace Spot.SrtL
 
             Test test = new Test();
             test.DefinedAt = token.Position;
+
             if (analyzer.LookAhead().Text == "description")
                 test.Description = Description();
 
             test.Input = Input();
+            if (analyzer.LookAhead().Text == "start")
+                test.StartFrom = StartFrom();
+
             test.Validity = Validity();
 
             result.Add(test);
+        }
+
+        /// <summary>
+        /// Parses the description of a test.
+        /// </summary>
+        /// <returns>The description of a test.</returns>
+        private Description Description()
+        {
+            IssueErrorUntil("description", "Expected 'description' keyword.");
+
+            return new Description(analyzer.Next().Position, ConcatenatedString());
         }
 
         /// <summary>
@@ -80,11 +95,20 @@ namespace Spot.SrtL
             return new Input();
         }
 
-        private Description Description()
+        /// <summary>
+        /// Parses the description of a test.
+        /// </summary>
+        /// <returns>The description of a test.</returns>
+        private StartingPoint StartFrom()
         {
-            IssueErrorUntil("description", "Expected 'description' keyword.");
+            var start = analyzer.LookAhead().Position;
+            IssueErrorUntil("start", "Expected 'start' keyword.");
+            analyzer.Next();
 
-            return new Description(analyzer.Next().Position, ConcatenatedString());
+            IssueErrorUntil("from", "Expected 'from' keyword.");
+            analyzer.Next();
+
+            return new StartingPoint(start, String());
         }
 
         /// <summary>

@@ -38,6 +38,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, test.DefinedAt.Column);
 
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
 
             Assert.AreEqual(2, test.Input.DefinedAt.Line);
             Assert.AreEqual(1, test.Input.DefinedAt.Column);
@@ -79,6 +80,7 @@ namespace Spot.SrtL
             Assert.AreEqual(1, test.DefinedAt.Column);
 
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
 
             Assert.AreEqual(2, test.Input.DefinedAt.Line);
             Assert.AreEqual(1, test.Input.DefinedAt.Column);
@@ -119,6 +121,7 @@ namespace Spot.SrtL
 
             var test = tests[0];
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -150,6 +153,7 @@ namespace Spot.SrtL
 
             var test = tests[0];
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -180,6 +184,7 @@ namespace Spot.SrtL
 
             var test = tests[0];
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -210,6 +215,7 @@ namespace Spot.SrtL
 
             var test = tests[0];
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -240,6 +246,7 @@ namespace Spot.SrtL
 
             var test = tests[0];
             Assert.IsNull(test.Description);
+            Assert.IsNull(test.StartFrom);
             Assert.AreEqual(1, test.Input.Contents.Strings.Count);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
             Assert.True(test.Validity.IsValid);
@@ -284,8 +291,56 @@ namespace Spot.SrtL
             Assert.AreEqual(44, test.Input.Contents.Strings[0].DefinedAt.Column);
             Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
 
+            Assert.IsNull(test.StartFrom);
+
             Assert.AreEqual(2, test.Validity.DefinedAt.Line);
             Assert.AreEqual(49, test.Validity.DefinedAt.Column);
+            Assert.True(test.Validity.IsValid);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="Parser.Parse(LexicalAnalyzer{TokenType})"/> 
+        /// can parse a test consisting of some input, starting point and the validity 
+        /// set to true.
+        /// </summary>
+        [Test]
+        public void Parse_TestWithStartingPoint_TestParses()
+        {
+            var builder = new TokenBuilder();
+            var tokens = builder.Test()
+                                .Input().String("Abc")
+                                .Start().From().String("my rule")
+                                .Is().Valid()
+                                .Build();
+
+            var parser = new Parser();
+            var result = parser.Parse(LexicalAnalyzer(tokens));
+
+            Assert.AreEqual(0, result.Errors.Count);
+
+            var tests = result.ToArray();
+            Assert.AreEqual(1, tests.Length);
+
+            var test = tests[0];
+            Assert.AreEqual(1, test.DefinedAt.Line);
+            Assert.AreEqual(1, test.DefinedAt.Column);
+
+            Assert.IsNull(test.Description);
+
+            Assert.AreEqual(2, test.Input.DefinedAt.Line);
+            Assert.AreEqual(1, test.Input.DefinedAt.Column);
+
+            Assert.AreEqual(1, test.Input.Contents.Strings.Count);
+            Assert.AreEqual(2, test.Input.Contents.Strings[0].DefinedAt.Line);
+            Assert.AreEqual(8, test.Input.Contents.Strings[0].DefinedAt.Column);
+            Assert.AreEqual("Abc", test.Input.Contents.Strings[0].Content);
+
+            Assert.AreEqual(2, test.StartFrom.DefinedAt.Line);
+            Assert.AreEqual(13, test.StartFrom.DefinedAt.Column);
+            Assert.AreEqual("my rule", test.StartFrom.Rule.Content);
+
+            Assert.AreEqual(2, test.Validity.DefinedAt.Line);
+            Assert.AreEqual(33, test.Validity.DefinedAt.Column);
             Assert.True(test.Validity.IsValid);
         }
 
