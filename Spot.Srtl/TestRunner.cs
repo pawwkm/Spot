@@ -42,18 +42,23 @@ namespace Spot.SrtL
             var validator = new SyntaxValidator(syntax);
             foreach (var t in tests)
             {
-                var result = validator.Validate(t.Input.Contents.Concatenate());
+                SyntaxValidationResult result = null;
+                if (t.StartFrom != null)
+                    result = validator.Validate(t.Input.Contents.Concatenate(), t.StartFrom.Rule.Content);
+                else
+                    result = validator.Validate(t.Input.Contents.Concatenate());
+
                 if (t.Validity.IsValid != result.IsSyntaxValid)
                 {
-                    Console.WriteLine(t.DefinedAt.ToString("The test's validity assumption doesn't match the syntax."));
-                    Console.WriteLine("Rule trace:");
+                    output.WriteLine(t.DefinedAt.ToString("The test's validity assumption doesn't match the syntax."));
+                    output.WriteLine("Rule trace:");
 
                     foreach (var frame in result.RuleTrace)
                     {
                         if (frame.ExitPoint == null)
-                            Console.WriteLine("\tRule \"{0}\" entered at {1} ecountered an error at {2}", frame.Rule, frame.EntryPoint, frame.ErrorPoint);
+                            output.WriteLine("\tRule \"{0}\" entered at {1} ecountered an error at {2}", frame.Rule, frame.EntryPoint, frame.ErrorPoint);
                         else
-                            Console.WriteLine("\tRule \"{0}\" entered at {1} and exited at {2}", frame.Rule, frame.EntryPoint, frame.ExitPoint);
+                            output.WriteLine("\tRule \"{0}\" entered at {1} and exited at {2}", frame.Rule, frame.EntryPoint, frame.ExitPoint);
                     }
                 }
             }

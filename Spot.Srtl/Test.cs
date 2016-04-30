@@ -25,6 +25,16 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// The rule to start the test from. 
+        /// If null, the tests starts from the rule dictated by the meta syntax.
+        /// </summary>
+        public StartingPoint StartFrom
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// The input to test against a given syntax.
         /// </summary>
         /// <exception cref="ArgumentNullException">
