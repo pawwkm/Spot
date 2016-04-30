@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Spot.Ebnf
 {
@@ -26,6 +26,6 @@ namespace Spot.Ebnf
         /// <exception cref="ArgumentNullException">
         /// <paramref name="sequence"/> is null.
         /// </exception>
-        Collection<string> Generate(string sequence);
+        IEnumerable<string> Generate(string sequence);
     }
 }

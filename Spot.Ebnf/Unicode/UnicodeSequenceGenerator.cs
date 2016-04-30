@@ -34,24 +34,21 @@ namespace Spot.Ebnf.Unicode
         /// <exception cref="ArgumentNullException">
         /// <paramref name="sequence"/> is null.
         /// </exception>
-        public Collection<string> Generate(string sequence)
+        public IEnumerable<string> Generate(string sequence)
         {
             UnicodeSequence us = Get(sequence);
-            if (!us.IsValidSequence)
-                return new Collection<string>();
-
-            List<string> strings = new List<string>();
-            foreach (char c in us.Characters)
-                strings.Add(c.ToString());
-
-            for (char c = '\0'; c < char.MaxValue; c++)
+            if (us.IsValidSequence)
             {
-                UnicodeCategory category = char.GetUnicodeCategory(c);
-                if (us.Categories.Contains(category))
-                    strings.Add(c.ToString());
-            }
+                foreach (char c in us.Characters)
+                    yield return c.ToString();
 
-            return new Collection<string>(strings);
+                for (char c = '\0'; c < char.MaxValue; c++)
+                {
+                    UnicodeCategory category = char.GetUnicodeCategory(c);
+                    if (us.Categories.Contains(category))
+                        yield return c.ToString();
+                }
+            }
         }
 
         /// <summary>

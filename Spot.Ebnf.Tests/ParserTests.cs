@@ -31,7 +31,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
             Assert.AreEqual(1, syntax.Start.Branches.Count);
@@ -42,7 +42,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(2, syntax.Start.Branches.Count);
 
@@ -77,14 +77,14 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single1.SyntacticTerms[0].Factor.NumberOfRepetitions);
             
-            Assert.AreEqual("Abc", ((TerminalString)single1.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single1.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
 
             SingleDefinition single2 = (SingleDefinition)syntax.Start.Branches[1];
             Assert.AreEqual(1, single2.SyntacticTerms.Count);
             
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
             
-            Assert.AreEqual("Def", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Def", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -119,7 +119,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(3, single.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -152,7 +152,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Rule", ((MetaIdentifier)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Rule", ((MetaIdentifier)single.SyntacticTerms[0].Factor.SyntacticPrimary).Name);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -185,7 +185,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Something", ((SpecialSequence)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Something", ((SpecialSequence)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(0, syntax.Start.Branches.Count);
         }
@@ -234,7 +234,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -251,7 +251,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -295,7 +295,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
 
             SingleDefinition single3 = (SingleDefinition)group.Branches[1];
             Assert.AreEqual(1, single3.SyntacticTerms.Count);
@@ -303,7 +303,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single3.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Def", ((TerminalString)single3.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Def", ((TerminalString)single3.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -345,7 +345,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -389,7 +389,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
 
             SingleDefinition single3 = (SingleDefinition)sequence.Branches[1];
             Assert.AreEqual(1, single3.SyntacticTerms.Count);
@@ -397,7 +397,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single3.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Def", ((TerminalString)single3.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Def", ((TerminalString)single3.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -422,7 +422,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -439,7 +439,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>
@@ -466,7 +466,7 @@ namespace Spot.Ebnf
             RuleReferenceResolver resolver = new RuleReferenceResolver();
             resolver.Resolve(syntax);
 
-            Assert.AreEqual("Rule", syntax.Start.MetaIdentifier.Text);
+            Assert.AreEqual("Rule", syntax.Start.Name);
 
             Assert.AreEqual(1, syntax.Start.Branches.Count);
 
@@ -483,7 +483,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single2.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Abc", ((TerminalString)single2.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
 
             SingleDefinition single3 = (SingleDefinition)sequence.Branches[1];
             Assert.AreEqual(1, single3.SyntacticTerms.Count);
@@ -491,7 +491,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single3.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Def", ((TerminalString)single3.SyntacticTerms[0].Factor.SyntacticPrimary).Value.Text);
+            Assert.AreEqual("Def", ((TerminalString)single3.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>

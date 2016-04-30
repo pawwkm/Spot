@@ -33,7 +33,7 @@ namespace Spot.Ebnf
             Rule[] rules = checker.Check(syntax).ToArray();
 
             Assert.AreEqual(1, rules.Length);
-            Assert.AreEqual("rule", rules[0].MetaIdentifier.Text);
+            Assert.AreEqual("rule", rules[0].Name);
         }
 
         /// <summary>
@@ -59,8 +59,8 @@ namespace Spot.Ebnf
             Rule[] rules = checker.Check(syntax).ToArray();
 
             Assert.AreEqual(2, rules.Length);
-            Assert.AreEqual("rule1", rules[0].MetaIdentifier.Text);
-            Assert.AreEqual("rule2", rules[1].MetaIdentifier.Text);
+            Assert.AreEqual("rule1", rules[0].Name);
+            Assert.AreEqual("rule2", rules[1].Name);
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace Spot.Ebnf
             Rule[] rules = checker.Check(syntax).ToArray();
 
             Assert.AreEqual(2, rules.Length);
-            Assert.AreEqual("rule1", rules[0].MetaIdentifier.Text);
-            Assert.AreEqual("rule2", rules[1].MetaIdentifier.Text);
+            Assert.AreEqual("rule1", rules[0].Name);
+            Assert.AreEqual("rule2", rules[1].Name);
         }
 
         /// <summary>
@@ -113,8 +113,8 @@ namespace Spot.Ebnf
             Rule[] rules = checker.Check(syntax).ToArray();
 
             Assert.AreEqual(2, rules.Length);
-            Assert.AreEqual("rule1", rules[0].MetaIdentifier.Text);
-            Assert.AreEqual("rule2", rules[1].MetaIdentifier.Text);
+            Assert.AreEqual("rule1", rules[0].Name);
+            Assert.AreEqual("rule2", rules[1].Name);
         }
 
         /// <summary>

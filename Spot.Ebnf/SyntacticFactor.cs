@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pote.Text;
+using System;
 
 namespace Spot.Ebnf
 {
@@ -12,10 +13,11 @@ namespace Spot.Ebnf
         /// that defines an <paramref name="primary"/> that is to occur once.
         /// </summary>
         /// <param name="primary">The syntactic primary of the factor.</param>
+        /// <param name="position">The position in the source where this syntactic factor were defined.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="primary"/> is null.
+        /// <paramref name="primary"/> or <paramref name="position"/> is null.
         /// </exception>
-        public SyntacticFactor(Definition primary)
+        public SyntacticFactor(Definition primary, InputPosition position) : base(position)
         {
             if (primary == null)
                 throw new ArgumentNullException(nameof(primary));
@@ -29,13 +31,14 @@ namespace Spot.Ebnf
         /// that defines an exact number of <paramref name="repetitions "/>.
         /// </summary>
         /// <param name="primary">The syntactic primary of the factor.</param>
+        /// <param name="position">The position in the source where this syntactic factor were defined.</param>
         /// <param name="repetitions">
         /// The exact number of times the <paramref name="primary"/> must be repeated.
         /// </param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="primary"/> is null.
+        /// <paramref name="primary"/> or <paramref name="position"/> is null.
         /// </exception>
-        public SyntacticFactor(Definition primary, uint repetitions)
+        public SyntacticFactor(Definition primary, InputPosition position, uint repetitions) : base(position)
         {
             if (primary == null)
                 throw new ArgumentNullException(nameof(primary));

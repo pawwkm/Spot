@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pote.Text;
+using System;
 
 namespace Spot.Ebnf
 {
@@ -10,13 +11,12 @@ namespace Spot.Ebnf
         /// <summary>
         /// Initializes a new instance of the <see cref="SyntacticTerm"/> class.
         /// </summary>
-        /// <param name="factor">
-        /// The factor contained by this term.
-        /// </param>
+        /// <param name="factor">The factor contained by this term.</param>
+        /// <param name="position">The position in the source where this syntactic term were defined.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="factor"/> is null.
+        /// <paramref name="factor"/> or <paramref name="position"/> is null.
         /// </exception>
-        public SyntacticTerm(SyntacticFactor factor)
+        public SyntacticTerm(SyntacticFactor factor, InputPosition position) : base(position)
         {
             if (factor == null)
                 throw new ArgumentNullException(nameof(factor));

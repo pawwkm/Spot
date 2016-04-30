@@ -11,22 +11,23 @@ namespace Spot.Ebnf
         /// <summary>
         /// Initializes a new instance of the <see cref="SpecialSequence"/> class.
         /// </summary>
-        /// <param name="value">The value of the special sequence without question marks.</param>
+        /// <param name="sequence">The value of the special sequence without question marks.</param>
+        /// <param name="position">The position in the source where this special sequence were defined.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="value"/> is null.
+        /// <paramref name="sequence"/> or <paramref name="position"/> is null.
         /// </exception>
-        public SpecialSequence(Token<TokenType> value)
+        public SpecialSequence(string sequence, InputPosition position) : base(position)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (sequence == null)
+                throw new ArgumentNullException(nameof(sequence));
 
-            Value = value;
+            Value = sequence;
         }
 
         /// <summary>
         /// The value of the special sequence without question marks.
         /// </summary>
-        public Token<TokenType> Value
+        public string Value
         {
             get;
             private set;

@@ -68,7 +68,7 @@ namespace Spot.Ebnf
                 foreach (string name in pair.Value)
                 {
                     var rule = (from r in references.Keys
-                                where r.MetaIdentifier.Text == name
+                                where r.Name == name
                                 select r).FirstOrDefault();
 
                     if (rule == null)
@@ -118,8 +118,8 @@ namespace Spot.Ebnf
                 {
                     foreach (var l in r.Branches)
                     {
-                        if (FindReferences(l, rule.MetaIdentifier.Text))
-                            references[rule].Add(r.MetaIdentifier.Text);
+                        if (FindReferences(l, rule.Name))
+                            references[rule].Add(r.Name);
                     }
                 }
             }
@@ -267,11 +267,11 @@ namespace Spot.Ebnf
         {
             if (IsRuleUndefined(identifier))
             {
-                string message = "The '" + identifier.Value.Text + "' rule is not declared.";
-                throw new ParsingException(identifier.Value.Position.ToString(message));
+                string message = "The '" + identifier.Name + "' rule is not declared.";
+                throw new ParsingException(identifier.DefinedAt.ToString(message));
             }
 
-            if (identifier.Value.Text == name)
+            if (identifier.Name == name)
                 return true;
 
             return false;
@@ -286,7 +286,7 @@ namespace Spot.Ebnf
         private bool IsRuleUndefined(MetaIdentifier identifier)
         {
             var r = (from rule in source
-                     where rule.MetaIdentifier.Text == identifier.Value.Text
+                     where rule.Name == identifier.Name
                      select rule).FirstOrDefault();
 
             return r == null;

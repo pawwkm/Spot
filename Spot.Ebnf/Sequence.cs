@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Pote.Text;
+using System;
 
 namespace Spot.Ebnf
 {
@@ -8,6 +9,17 @@ namespace Spot.Ebnf
     public abstract class Sequence : Definition
     {
         private DefinitionList branches = new DefinitionList();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sequence"/> class.
+        /// </summary>
+        /// <param name="position">The position in the source where this sequence were defined.</param>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="position"/> is null.
+        /// </exception>
+        public Sequence(InputPosition position) : base(position)
+        {
+        }
 
         /// <summary>
         /// The possible branches in this sequence.

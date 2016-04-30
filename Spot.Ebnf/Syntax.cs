@@ -62,7 +62,7 @@ namespace Spot.Ebnf
 
             foreach (Rule rule in this)
             {
-                if (rule.MetaIdentifier.Text == name)
+                if (rule.Name == name)
                     return rule;
             }
 

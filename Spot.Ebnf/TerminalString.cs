@@ -8,17 +8,18 @@ namespace Spot.Ebnf
     /// <summary>
     /// Represents a terminal string.
     /// </summary>
-    [DebuggerDisplay("{Value.Text}")]
+    [DebuggerDisplay("{Value}")]
     public sealed class TerminalString : Definition
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TerminalString"/> class.
         /// </summary>
         /// <param name="value">The value of the terminal string without quotes.</param>
+        /// <param name="position">The position in the source where this terminal string were defined.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="value"/> is null.
+        /// <paramref name="value"/> or <paramref name="position"/> is null.
         /// </exception>
-        public TerminalString(Token<TokenType> value)
+        public TerminalString(string value, InputPosition position) : base(position)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -29,27 +30,10 @@ namespace Spot.Ebnf
         /// <summary>
         /// The value of the terminal string without quotes.
         /// </summary>
-        public Token<TokenType> Value
+        public string Value
         {
             get;
             private set;
-        }
-
-        /// <summary>
-        /// Converts the terminal to a string.
-        /// </summary>
-        /// <param name="terminal">The terminal to convert.</param>
-        /// <returns>The text value of the terminal.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="terminal"/> is null.
-        /// </exception>
-        [SuppressMessage("Microsoft.Usage", "CA2225:OperatorOverloadsHaveNamedAlternates", Justification = Justifications.NotClsCompliant)]
-        public static explicit operator string(TerminalString terminal)
-        {
-            if (terminal == null)
-                throw new ArgumentNullException(nameof(terminal));
-
-            return terminal.Value.Text;
         }
     }
 }

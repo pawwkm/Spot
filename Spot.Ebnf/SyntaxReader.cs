@@ -103,8 +103,8 @@ namespace Spot.Ebnf
                     StringBuilder builder = new StringBuilder();
                     foreach (Rule rule in leftRecursions)
                     {
-                        string message = rule.MetaIdentifier.Text + " is recursive.";
-                        message = rule.MetaIdentifier.Position.ToString(message);
+                        string message = rule.Name + " is recursive.";
+                        message = rule.DefinedAt.ToString(message);
 
                         builder.AppendLine(message);
                     }

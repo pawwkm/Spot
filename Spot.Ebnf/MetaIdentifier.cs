@@ -7,28 +7,29 @@ namespace Spot.Ebnf
     /// <summary>
     /// Represents a meta identifier.
     /// </summary>
-    [DebuggerDisplay("{Value.Text, nq}")]
+    [DebuggerDisplay("{Value, nq}")]
     public sealed class MetaIdentifier : Definition
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaIdentifier"/> class.
         /// </summary>
-        /// <param name="value">The value of the meta identifier.</param>
+        /// <param name="name">The meta identifier.</param>
+        /// <param name="position">The position in the source where this meta identifier were defined.</param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="value"/> is null.
+        /// <paramref name="name"/> or <paramref name="position"/> is null.
         /// </exception>
-        public MetaIdentifier(Token<TokenType> value)
+        public MetaIdentifier(string name, InputPosition position) : base(position)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
-            Value = value;
+            Name = name;
         }
 
         /// <summary>
-        /// The value of the meta identifier.
+        /// The meta identifier.
         /// </summary>
-        public Token<TokenType> Value
+        public string Name
         {
             get;
             private set;

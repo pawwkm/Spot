@@ -253,7 +253,7 @@ namespace Spot.Ebnf
 
                 InputPosition startPosition = Path.Position.DeepCopy();
 
-                RuleFrame frame = new RuleFrame(ruleToStartFrom.MetaIdentifier.Text, startPosition.DeepCopy());
+                RuleFrame frame = new RuleFrame(ruleToStartFrom.Name, startPosition.DeepCopy());
                 Path.RuleTrace.Add(frame);
 
                 if (Validate(ruleToStartFrom.Branches[i]))
@@ -407,7 +407,7 @@ namespace Spot.Ebnf
             var isValid = false;
             foreach (var branch in rule.Branches)
             {
-                RuleFrame frame = new RuleFrame(rule.MetaIdentifier.Text, Path.Position.DeepCopy());
+                RuleFrame frame = new RuleFrame(rule.Name, Path.Position.DeepCopy());
                 Path.RuleTrace.Add(frame);
 
                 int index = Path.RuleTrace.IndexOf(frame);
@@ -631,12 +631,12 @@ namespace Spot.Ebnf
             ISpecialSequenceValidator selected = null;
             foreach (var validator in SpecialSequenceValidators)
             {
-                if (validator.IsValid(sequence.Value.Text))
+                if (validator.IsValid(sequence.Value))
                 {
                     if (selected != null)
                     {
                         string message = "Ambiguous special sequence.";
-                        Path.Message = sequence.Value.Position.ToString(message);
+                        Path.Message = sequence.DefinedAt.ToString(message);
                         Path.State = PathState.Error;
 
                         return false; 
@@ -648,7 +648,7 @@ namespace Spot.Ebnf
 
             if (selected != null)
             {
-                bool characterConsumed = selected.Consume(source, sequence.Value.Text, Path.Position);
+                bool characterConsumed = selected.Consume(source, sequence.Value, Path.Position);
                 if (characterConsumed)
                     Path.ByteIndex = source.Position;
 
@@ -665,21 +665,21 @@ namespace Spot.Ebnf
         /// <returns>True if the source conforms to referenced rule.</returns>
         private bool Validate(MetaIdentifier identifier)
         {
-            if (includedRules != null && !includedRules.Contains(identifier.Value.Text))
+            if (includedRules != null && !includedRules.Contains(identifier.Name))
                 return true;
 
-            if (excludedRules != null && excludedRules.Contains(identifier.Value.Text))
+            if (excludedRules != null && excludedRules.Contains(identifier.Name))
                 return true;
 
             var rule = (from r in Syntax
-                        where r.MetaIdentifier.Text == identifier.Value.Text
+                        where r.Name == identifier.Name
                         select r).FirstOrDefault();
 
             if (rule == null)
             {
                 string message = "Referencing an undefined rule.";
-                Path.Message = identifier.Value.Position.ToString(message);
-                
+                Path.Message = identifier.DefinedAt.ToString(message);
+
                 return false;
             }
 
@@ -693,7 +693,7 @@ namespace Spot.Ebnf
         /// <returns>True if the source conforms to the <paramref name="terminal"/>.</returns>
         private bool Validate(TerminalString terminal)
         {
-            return Consume(terminal.Value.Text);
+            return Consume(terminal.Value);
         }
 
         /// <summary>
