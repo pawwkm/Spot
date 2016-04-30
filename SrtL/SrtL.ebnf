@@ -19,10 +19,10 @@ start from =
     "start", ws, "from", ws, string ;
 	
 include =
-    "include", ws, "rules", string list ;
+    "include", [ ws ], string list ;
 	
 exclude =
-    "exclude", ws, "rules", string list ;
+    "exclude", [ ws ], string list ;
 	
 exclude all rules =
     "exclude", ws, "all", ws, "rules" ;
