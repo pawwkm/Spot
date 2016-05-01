@@ -147,7 +147,7 @@ namespace Spot.Ebnf
             stream = output;
 
             ulong count = 0;
-            foreach (var test in Generate(syntax.Start))
+            foreach (var test in Generate(rule))
             {
                 ushort length = (ushort)test.Length;
 
