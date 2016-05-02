@@ -52,6 +52,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestVerb.cs" />
+    <Compile Include="ThirdParty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

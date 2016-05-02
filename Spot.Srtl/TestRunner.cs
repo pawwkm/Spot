@@ -1,5 +1,6 @@
 ﻿using Spot.Ebnf;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Spot.SrtL
@@ -13,19 +14,27 @@ namespace Spot.SrtL
 
         private SyntaxValidator validator;
 
+        private List<ISpecialSequenceValidator> specialValidators;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TestRunner"/> class.
         /// </summary>
         /// <param name="writer">The output to write to.</param>
+        /// <param name="validators">
+        /// The special sequence validators that are available to the test runner.
+        /// </param>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="writer"/> is null.
+        /// <paramref name="writer"/> or <paramref name="validators"/> is null.
         /// </exception>
-        public TestRunner(TextWriter writer)
+        public TestRunner(TextWriter writer, IEnumerable<ISpecialSequenceValidator> validators)
         {
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
+            if (validators == null)
+                throw new ArgumentNullException(nameof(validators));
 
             output = writer;
+            specialValidators = new List<ISpecialSequenceValidator>(validators);
         }
 
         /// <summary>
@@ -42,6 +51,9 @@ namespace Spot.SrtL
                 throw new ArgumentException("The tests have errors. Check " + nameof(tests.Errors), nameof(tests));
 
             validator = new SyntaxValidator(syntax);
+            foreach (var v in specialValidators)
+                validator.SpecialSequenceValidators.Add(v);
+
             foreach (var t in tests)
             {
                 var result = Validate(t);
