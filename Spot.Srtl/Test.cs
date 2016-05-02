@@ -56,6 +56,16 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// If null, the test have not been defined with the 
+        /// "exclude all rules" keywords.
+        /// </summary>
+        public ExcludingAllRules ExcludingAllRules
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// The validity of this test's <see cref="Input"/>.
         /// </summary>
         /// <exception cref="ArgumentNullException">
