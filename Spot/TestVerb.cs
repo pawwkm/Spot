@@ -73,7 +73,7 @@ namespace Spot
                 return 0;
             }
 
-            var runner = new TestRunner(Console.Out);
+            var runner = new TestRunner(Console.Out, ThirdParty.GetSpecialSequenceValidators());
             runner.Run(testCollection, syntax);
 
             return 0;
