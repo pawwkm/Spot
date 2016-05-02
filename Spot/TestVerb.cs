@@ -34,7 +34,7 @@ namespace Spot
         {
             get
             {
-                return "";
+                return "Tests a syntax against a set of SrtL tests";
             }
         }
 
