@@ -16,6 +16,8 @@ namespace Spot.SrtL
 
         private ExcludingAllRules excludingAllRules;
 
+        private ExcludedRules excludedRules;
+
         private InputPosition definedAt = new InputPosition();
 
         /// <summary>
@@ -64,8 +66,8 @@ namespace Spot.SrtL
         /// "exclude all rules" keywords.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// <see cref="IncludedRules"/> must be null before setting
-        /// this to a non-null value.
+        /// <see cref="IncludedRules"/> and <see cref="ExcludedRules"/> 
+        /// must be null before setting this to a non-null value.
         /// </exception>
         public ExcludingAllRules ExcludingAllRules
         {
@@ -77,8 +79,35 @@ namespace Spot.SrtL
             {
                 if (IncludedRules != null && value != null)
                     throw new InvalidOperationException(nameof(IncludedRules) + " must be null before setting this to a non-null value.");
+                if (ExcludedRules != null && value != null)
+                    throw new InvalidOperationException(nameof(ExcludedRules) + " must be null before setting this to a non-null value.");
 
                 excludingAllRules = value;
+            }
+        }
+
+        /// <summary>
+        /// If null, the test have not been defined with a
+        /// set of excluded rules.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// <see cref="ExcludingAllRules"/> and <see cref="IncludedRules"/> 
+        /// must be null before setting this to a non-null value.
+        /// </exception>
+        public ExcludedRules ExcludedRules
+        {
+            get
+            {
+                return excludedRules;
+            }
+            set
+            {
+                if (IncludedRules != null &&  value != null)
+                    throw new InvalidOperationException(nameof(IncludedRules) + " must be null before setting this to a non-null value.");
+                if (ExcludingAllRules != null && value != null)
+                    throw new InvalidOperationException(nameof(ExcludingAllRules) + " must be null before setting this to a non-null value.");
+
+                excludedRules = value;
             }
         }
 
@@ -87,8 +116,8 @@ namespace Spot.SrtL
         /// set of included rules.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// <see cref="ExcludingAllRules"/> must be null before setting
-        /// this to a non-null value.
+        /// <see cref="ExcludingAllRules"/> and <see cref="ExcludedRules"/> 
+        /// must be null before setting this to a non-null value.
         /// </exception>
         public IncludedRules IncludedRules
         {
@@ -100,6 +129,8 @@ namespace Spot.SrtL
             {
                 if (ExcludingAllRules != null && value != null)
                     throw new InvalidOperationException(nameof(ExcludingAllRules) + " must be null before setting this to a non-null value.");
+                if (ExcludedRules != null && value != null)
+                    throw new InvalidOperationException(nameof(ExcludedRules) + " must be null before setting this to a non-null value.");
 
                 includedRules = value;
             }

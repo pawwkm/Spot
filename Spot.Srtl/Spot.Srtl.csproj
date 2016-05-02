@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ConcatenatedString.cs" />
     <Compile Include="Description.cs" />
+    <Compile Include="ExcludedRules.cs" />
     <Compile Include="ExcludingAllRules.cs" />
     <Compile Include="IncludedRules.cs" />
     <Compile Include="Input.cs" />

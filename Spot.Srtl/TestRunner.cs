@@ -77,6 +77,8 @@ namespace Spot.SrtL
                 return validator.Validate(input, rule, new Ebnf.IncludedRules());
             else if (test.IncludedRules != null)
                 return validator.Validate(input, rule, new Ebnf.IncludedRules(test.IncludedRules.Rules.ToRawStrings()));
+            else if (test.ExcludedRules != null)
+                return validator.Validate(input, rule, new Ebnf.ExcludedRules(test.ExcludedRules.Rules.ToRawStrings()));
             else
                 return validator.Validate(input, rule);
         }

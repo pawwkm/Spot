@@ -60,6 +60,8 @@ namespace Spot.SrtL
 
             if (analyzer.NextIs("exclude").Then("all").Then("rules"))
                 test.ExcludingAllRules = ExcludingAllRules();
+            else if (analyzer.NextIs("exclude"))
+                test.ExcludedRules = ExcludedRules();
             else if (analyzer.NextIs("include"))
                 test.IncludedRules = IncludedRules();
 
@@ -138,6 +140,17 @@ namespace Spot.SrtL
             var include = analyzer.Next().Position;
 
             return new IncludedRules(include, StringList());
+        }
+
+        /// <summary>
+        /// Parses the list of excluded rules.
+        /// </summary>
+        /// <returns>The list of excluded rules.</returns>
+        private ExcludedRules ExcludedRules()
+        {
+            var include = analyzer.Next().Position;
+
+            return new ExcludedRules(include, StringList());
         }
 
         /// <summary>

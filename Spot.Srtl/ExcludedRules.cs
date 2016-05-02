@@ -4,19 +4,19 @@ using System;
 namespace Spot.SrtL
 {
     /// <summary>
-    /// Defines the rules that can be called in a test.
+    /// Defines the rules that can't be called in a test.
     /// </summary>
-    public sealed class IncludedRules
+    public sealed class ExcludedRules
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="IncludedRules"/> class.
+        /// Initializes a new instance of the <see cref="ExcludedRules"/> class.
         /// </summary>
-        /// <param name="position">The location where the 'include' keyword was defined.</param>
-        /// <param name="rules">The list of rules that can be called in a test.</param>
+        /// <param name="position">The location where the 'exclude' keyword was defined.</param>
+        /// <param name="rules">The list of rules that can't be called in a test.</param>
         /// <exception cref="ArgumentNullException">
         /// <paramref name="position"/> or <paramref name="rules"/> is null.
         /// </exception>
-        public IncludedRules(InputPosition position, StringList rules)
+        public ExcludedRules(InputPosition position, StringList rules)
         {
             if (position == null)
                 throw new ArgumentNullException(nameof(position));
@@ -28,7 +28,7 @@ namespace Spot.SrtL
         }
 
         /// <summary>
-        /// The location where the 'include' keyword was defined.
+        /// The location where the 'exclude' keyword was defined.
         /// </summary>
         public InputPosition DefinedAt
         {
@@ -37,7 +37,7 @@ namespace Spot.SrtL
         }
 
         /// <summary>
-        /// The list of rules that can be called in a test.
+        /// The list of rules that can't be called in a test.
         /// </summary>
         public StringList Rules
         {
