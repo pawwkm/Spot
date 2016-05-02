@@ -60,6 +60,8 @@ namespace Spot.SrtL
 
             if (analyzer.NextIs("exclude").Then("all").Then("rules"))
                 test.ExcludingAllRules = ExcludingAllRules();
+            else if (analyzer.NextIs("include"))
+                test.IncludedRules = IncludedRules();
 
             test.Validity = Validity();
 
@@ -128,6 +130,17 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// Parses the list of included rules.
+        /// </summary>
+        /// <returns>The list of included rules.</returns>
+        private IncludedRules IncludedRules()
+        {
+            var include = analyzer.Next().Position;
+
+            return new IncludedRules(include, StringList());
+        }
+
+        /// <summary>
         /// Parses the validity of a test.
         /// </summary>
         /// <returns>
@@ -190,6 +203,25 @@ namespace Spot.SrtL
                 strings.Strings.Add(String());
 
             return strings;
+        }
+
+        /// <summary>
+        /// Parses a list of strings.
+        /// </summary>
+        /// <returns>The parsed list.</returns>
+        private StringList StringList()
+        {
+            IssueErrorUntil(TokenType.String, "Expected a concatenated string.");
+
+            var list = new StringList();
+            while (analyzer.NextIs(TokenType.String))
+            {
+                list.Add(String());
+                if (analyzer.NextIs(","))
+                    analyzer.Next();
+            }
+
+            return list;
         }
 
         /// <summary>
