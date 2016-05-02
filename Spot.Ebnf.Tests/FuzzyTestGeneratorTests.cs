@@ -334,7 +334,7 @@ namespace Spot.Ebnf
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
-            generator.SpecialSequenceGenerator.Add(sequence);
+            generator.SpecialSequenceGenerators.Add(sequence);
 
             using (MemoryStream stream = new MemoryStream())
             {

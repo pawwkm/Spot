@@ -16,6 +16,8 @@ namespace Spot
 
         private static List<ISpecialSequenceValidator> validators;
 
+        private static List<ISpecialSequenceGenerator> generators;
+
         /// <summary>
         /// Gets all third party implementations of the <see cref="ISpecialSequenceValidator"/> interface.
         /// </summary>
@@ -36,6 +38,28 @@ namespace Spot
             }
 
             return validators;
+        }
+
+        /// <summary>
+        /// Gets all third party implementations of the <see cref="ISpecialSequenceGenerator"/> interface.
+        /// </summary>
+        /// <returns>All third party implementations of the <see cref="ISpecialSequenceValidator"/> interface.</returns>
+        public static IEnumerable<ISpecialSequenceGenerator> GetSpecialSequenceGenerators()
+        {
+            if (generators == null)
+            {
+                generators = new List<ISpecialSequenceGenerator>();
+                foreach (var path in Directory.GetFiles(ThirdPartyFolder, "*.dll", SearchOption.AllDirectories))
+                {
+                    var assembly = Assembly.LoadFile(Path.GetFullPath(path));
+                    var types = assembly.GetTypes().Select(t => t).Where(t => typeof(ISpecialSequenceGenerator).IsAssignableFrom(t) && t.GetConstructor(Type.EmptyTypes) != null);
+
+                    foreach (var type in types)
+                        generators.Add((ISpecialSequenceGenerator)Activator.CreateInstance(type));
+                }
+            }
+
+            return generators;
         }
     }
 }
