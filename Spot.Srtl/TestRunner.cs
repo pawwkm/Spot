@@ -11,6 +11,8 @@ namespace Spot.SrtL
     {
         private TextWriter output;
 
+        private SyntaxValidator validator;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TestRunner"/> class.
         /// </summary>
@@ -39,15 +41,10 @@ namespace Spot.SrtL
             if (tests.Errors.Count != 0)
                 throw new ArgumentException("The tests have errors. Check " + nameof(tests.Errors), nameof(tests));
 
-            var validator = new SyntaxValidator(syntax);
+            validator = new SyntaxValidator(syntax);
             foreach (var t in tests)
             {
-                SyntaxValidationResult result = null;
-                if (t.StartFrom != null)
-                    result = validator.Validate(t.Input.Contents.Concatenate(), t.StartFrom.Rule.Content);
-                else
-                    result = validator.Validate(t.Input.Contents.Concatenate());
-
+                var result = Validate(t);
                 if (t.Validity.IsValid != result.IsSyntaxValid)
                 {
                     output.WriteLine(t.DefinedAt.ToString("The test's validity assumption doesn't match the syntax."));
@@ -61,6 +58,29 @@ namespace Spot.SrtL
                             output.WriteLine("\tRule \"{0}\" entered at {1} and exited at {2}", frame.Rule, frame.EntryPoint, frame.ExitPoint);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Calls the appropriate method on the validator.
+        /// </summary>
+        /// <param name="test">The test to run.</param>
+        /// <returns>The result of the validation.</returns>
+        private SyntaxValidationResult Validate(Test test)
+        {
+            if (test.StartFrom != null)
+            {
+                if (test.ExcludingAllRules != null)
+                    return validator.Validate(test.Input.Contents.Concatenate(), test.StartFrom.Rule.Content, new IncludedRules());
+                else
+                    return validator.Validate(test.Input.Contents.Concatenate(), test.StartFrom.Rule.Content);
+            }
+            else
+            {
+                if (test.ExcludingAllRules != null)
+                    return validator.Validate(test.Input.Contents.Concatenate(), validator.Syntax.Name, new IncludedRules());
+                else
+                    return validator.Validate(test.Input.Contents.Concatenate());
             }
         }
     }

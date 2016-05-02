@@ -131,6 +131,42 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// Creates a token of the 'exclude' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder Exclude()
+        {
+            var token = Token("exclude", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\texclude");
+
+            return token;
+        }
+
+        /// <summary>
+        /// Creates a token of the 'all' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder All()
+        {
+            var token = Token("all", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\tall");
+
+            return token;
+        }
+
+        /// <summary>
+        /// Creates a token of the 'rules' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder Rules()
+        {
+            var token = Token("rules", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\trules");
+
+            return token;
+        }
+
+        /// <summary>
         /// Creates a string token.
         /// </summary>
         /// <param name="text">The content of the string.</param>

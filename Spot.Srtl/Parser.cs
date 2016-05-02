@@ -51,12 +51,15 @@ namespace Spot.SrtL
             Test test = new Test();
             test.DefinedAt = token.Position;
 
-            if (analyzer.LookAhead().Text == "description")
+            if (analyzer.NextIs("description"))
                 test.Description = Description();
 
             test.Input = Input();
-            if (analyzer.LookAhead().Text == "start")
+            if (analyzer.NextIs("start"))
                 test.StartFrom = StartFrom();
+
+            if (analyzer.NextIs("exclude").Then("all").Then("rules"))
+                test.ExcludingAllRules = ExcludingAllRules();
 
             test.Validity = Validity();
 
@@ -109,6 +112,19 @@ namespace Spot.SrtL
             analyzer.Next();
 
             return new StartingPoint(start, String());
+        }
+
+        /// <summary>
+        /// Parses the 'exclude all rules' keywords.
+        /// </summary>
+        /// <returns>The 'exclude all rules' keywords.</returns>
+        private ExcludingAllRules ExcludingAllRules()
+        {
+            var exclude = analyzer.Next().Position;
+            var all = analyzer.Next().Position;
+            var rules = analyzer.Next().Position;
+
+            return new ExcludingAllRules(exclude, all, rules);
         }
 
         /// <summary>

@@ -43,8 +43,8 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Pote.Text, Version=0.7.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Pote.Text.0.7.2\lib\net45\Pote.Text.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Pote.Text.0.7.4\lib\net45\Pote.Text.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ConcatenatedString.cs" />
     <Compile Include="Description.cs" />
+    <Compile Include="ExcludingAllRules.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="LexicalAnalyzer.cs" />
     <Compile Include="Parser.cs" />
