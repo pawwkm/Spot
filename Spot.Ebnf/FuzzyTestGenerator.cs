@@ -82,7 +82,7 @@ namespace Spot.Ebnf
         /// <summary>
         /// The list of special sequence generators used by this test generator.
         /// </summary>
-        public IList<ISpecialSequenceGenerator> SpecialSequenceGenerator
+        public IList<ISpecialSequenceGenerator> SpecialSequenceGenerators
         {
             get
             {
@@ -355,7 +355,7 @@ namespace Spot.Ebnf
         private IEnumerable<string> Generate(SpecialSequence sequence)
         {
             ISpecialSequenceGenerator selected = null;
-            foreach (var validator in SpecialSequenceGenerator)
+            foreach (var validator in SpecialSequenceGenerators)
             {
                 if (validator.IsValid(sequence.Value))
                 {

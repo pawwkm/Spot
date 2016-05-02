@@ -95,6 +95,9 @@ namespace Spot
             var syntax = reader.Read(SyntaxFile);
 
             var generator = new FuzzyTestGenerator();
+            foreach (var g in ThirdParty.GetSpecialSequenceGenerators())
+                generator.SpecialSequenceGenerators.Add(g);
+
             if (MaxRecursionDepth < 1)
             {
                 Console.WriteLine("The max recursion depth is below 1");
