@@ -68,20 +68,17 @@ namespace Spot.SrtL
         /// <returns>The result of the validation.</returns>
         private SyntaxValidationResult Validate(Test test)
         {
+            var rule = validator.Syntax.Start.Name;
             if (test.StartFrom != null)
-            {
-                if (test.ExcludingAllRules != null)
-                    return validator.Validate(test.Input.Contents.Concatenate(), test.StartFrom.Rule.Content, new IncludedRules());
-                else
-                    return validator.Validate(test.Input.Contents.Concatenate(), test.StartFrom.Rule.Content);
-            }
+                rule = test.StartFrom.Rule.Content;
+
+            var input = test.Input.Contents.Concatenate();
+            if (test.ExcludingAllRules != null)
+                return validator.Validate(input, rule, new Ebnf.IncludedRules());
+            else if (test.IncludedRules != null)
+                return validator.Validate(input, rule, new Ebnf.IncludedRules(test.IncludedRules.Rules.ToRawStrings()));
             else
-            {
-                if (test.ExcludingAllRules != null)
-                    return validator.Validate(test.Input.Contents.Concatenate(), validator.Syntax.Name, new IncludedRules());
-                else
-                    return validator.Validate(test.Input.Contents.Concatenate());
-            }
+                return validator.Validate(input, rule);
         }
     }
 }

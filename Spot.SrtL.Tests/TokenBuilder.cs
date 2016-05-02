@@ -143,6 +143,18 @@ namespace Spot.SrtL
         }
 
         /// <summary>
+        /// Creates a token of the 'include' keyword.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder Include()
+        {
+            var token = Token("include", TokenType.Keyword, position.DeepCopy());
+            position.Advance("\tinclude ");
+
+            return token;
+        }
+
+        /// <summary>
         /// Creates a token of the 'all' keyword.
         /// </summary>
         /// <returns>This builder.</returns>
@@ -178,6 +190,18 @@ namespace Spot.SrtL
             position.Advance('"');
             position.Advance(text);
             position.Advance('"');
+
+            return token;
+        }
+
+        /// <summary>
+        /// Creates a token of the ',' symbol.
+        /// </summary>
+        /// <returns>This builder.</returns>
+        public TokenBuilder Comma()
+        {
+            var token = Token(",", TokenType.Symbol, position.DeepCopy());
+            position.Advance(",");
 
             return token;
         }
