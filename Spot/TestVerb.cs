@@ -13,15 +13,18 @@ namespace Spot
     /// </summary>
     internal class TestVerb : Verb
     {
-        private string grammar = "";
+        [Option(MetaName = "syntax", IsRequired = true, Help = "Path to the ebnf syntax to test", Default = new string[0])]
+        [ExtensionValidator("ebnf")]
+        public IEnumerable<string> Syntaxes
+        {
+            get;
+            set;
+        }
 
-        private List<string> tests = new List<string>();
-
-        /// <summary>
-        /// The files handed to the verb.
-        /// </summary>
-        [RangedOption("files", Help = "The .srtl files and a .ebnf file.", Default = new string[] { })]
-        public IEnumerable<string> Files
+        [Option(MetaName = "tests", IsRequired = true, Help = "The SrtL file paths", Default = new string[0])]
+        [ExtensionValidator("srtl", IgnoreNonFilePaths = true)]
+        [FileInterceptor("srtl")]
+        public IEnumerable<string> Tests
         {
             get;
             set;
@@ -55,9 +58,38 @@ namespace Spot
         /// <returns>The exit code of the verb.</returns>
         public override int Execute()
         {
-            var code = GetFiles();
-            if (code != 0)
-                return code;
+            var grammar = "";
+            foreach (var file in Syntaxes)
+            {
+                if (grammar != "")
+                {
+                    Console.WriteLine("Multiple .ebnf files specified.");
+
+                    return 0;
+                }
+
+                if (!File.Exists(file))
+                {
+                    Console.WriteLine("The file '" + file + "' doesn't exist.");
+
+                    return 0;
+                }
+
+                grammar = file;
+            }
+
+            var tests = new List<string>();
+            foreach (var test in Tests.Distinct())
+            {
+                if (!File.Exists(test))
+                {
+                    Console.WriteLine("The file '" + test + "' doesn't exist.");
+
+                    return 0;
+                }
+
+                tests.Add(test);
+            }
 
             var reader = new SyntaxReader();
             var syntax = reader.Read(grammar);
@@ -75,101 +107,6 @@ namespace Spot
 
             var runner = new TestRunner(Console.Out, ThirdParty.GetSpecialSequenceValidators());
             runner.Run(testCollection, syntax);
-
-            return 0;
-        }
-
-        /// <summary>
-        /// Extracts the paths from <see cref="Files"/>.
-        /// </summary>
-        /// <returns>Zero if the paths are valid; otherwise non-zero.</returns>
-        private int GetFiles()
-        {
-            foreach (var file in Files)
-            {
-                if (Path.GetExtension(file) == ".ebnf")
-                {
-                    if (grammar == "")
-                        grammar = file;
-                    else
-                    {
-                        Console.WriteLine("Multiple .ebnf files specified.");
-
-                        return 1;
-                    }
-                }
-                else if (Path.GetExtension(file) == ".srtl")
-                {
-                    var files = Directory.GetFiles(Directory.GetCurrentDirectory(), file, SearchOption.AllDirectories);
-                    foreach (var f in files)
-                    {
-                        if (tests.Contains(f))
-                        {
-                            Console.WriteLine("The file '" + file + "' has already been added.");
-
-                            return 1;
-                        }
-                        else
-                            tests.Add(f);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("The file '" + file + "' is not a syntax or .srtl file.");
-
-                    return 1;
-                }
-            }
-
-            if (grammar == "")
-            {
-                var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.ebnf", SearchOption.AllDirectories).ToList();
-                if (files.Count == 0)
-                {
-                    Console.WriteLine("No .ebnf file was found in the current directory or in its sub directories.");
-
-                    return 1;
-                }
-                else if (files.Count > 1)
-                {
-                    Console.WriteLine("Multiple .ebnf files where found.");
-
-                    return 1;
-                }
-
-                grammar = files[0];
-            }
-
-            if (tests.Count == 0)
-            {
-                tests = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.srtl", SearchOption.AllDirectories).ToList();
-                if (tests.Count == 0)
-                {
-                    Console.WriteLine("No .srtl files was found in the current directory or in its sub directories.");
-
-                    return 1;
-                }
-            }
-
-            if (!File.Exists(grammar))
-            {
-                Console.WriteLine("The file '" + grammar + "' doesn't exist.");
-
-                return 1;
-            }
-
-            for (var i = 0; i < tests.Count; i++)
-            {
-                if (tests[i].StartsWith(Directory.GetCurrentDirectory()))
-                    tests[i] = tests[i].Substring(Directory.GetCurrentDirectory().Length + 1);
-
-                if (!File.Exists(tests[i]))
-                {
-                    Console.WriteLine("The file '" + tests[i] + "' doesn't exist.");
-
-                    return 1;
-                }
-            }
 
             return 0;
         }

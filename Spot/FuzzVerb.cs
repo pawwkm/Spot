@@ -13,7 +13,7 @@ namespace Spot
         /// <summary>
         /// Changes the rule to start from.
         /// </summary>
-        [SingleOption('s', "start-from", Help = "Start from a specific rule", Default = "")]
+        [Option('s', "start-from", Help = "Start from a specific rule", Default = "")]
         public string StartFrom
         {
             get;
@@ -23,7 +23,7 @@ namespace Spot
         /// <summary>
         /// The max recursion depth of each rule.
         /// </summary>
-        [SingleOption('d', "recursion-depth", Help = "The max depth of recursion for a single rule", Default = 3)]
+        [Option('d', "recursion-depth", Help = "The max depth of recursion for a single rule", Default = 3)]
         public int MaxRecursionDepth
         {
             get;
@@ -33,7 +33,7 @@ namespace Spot
         /// <summary>
         /// The file where the output is written to.
         /// </summary>
-        [SingleOption('o', "output", Help = "The file where the fuzzy tests are written to", Default = "")]
+        [Option('o', "output", Help = "The file where the fuzzy tests are written to", Default = "")]
         public string OutputFile
         {
             get;
@@ -43,7 +43,7 @@ namespace Spot
         /// <summary>
         /// The file containing the syntax definition.
         /// </summary>
-        [FileOption(Help = "The syntax to generate fuzzy tests for", Pattern = @".*\.ebnf")]
+        [Option(MetaName = "syntax file", Help = "The syntax to generate fuzzy tests for")]
         public string SyntaxFile
         {
             get;
@@ -53,7 +53,7 @@ namespace Spot
         /// <summary>
         /// If true the number of tests generated is displayed.
         /// </summary>
-        [SingleOption('c', "count", Help = "Displays the number of tests generated")]
+        [Option('c', "count", Help = "Displays the number of tests generated")]
         public bool DisplayTestCount
         {
             get;

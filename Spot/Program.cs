@@ -14,11 +14,11 @@ namespace Spot
         /// <returns>The exit code of the verb or command that was executed.</returns>
         private static int Main(string[] args)
         {
-            var executor = new CommandExecutor();
-            executor.AddVerb<TestVerb>()
-                    .AddVerb<FuzzVerb>();
+            var interpreter = new Interpreter();
+            interpreter.AddVerb<TestVerb>()
+                       .AddVerb<FuzzVerb>();
 
-            return executor.Execute(args);
+            return interpreter.Run(args);
         }
     }
 }
