@@ -24,6 +24,9 @@ namespace Spot
         /// <returns>All third party implementations of the <see cref="ISpecialSequenceValidator"/> interface.</returns>
         public static IEnumerable<ISpecialSequenceValidator> GetSpecialSequenceValidators()
         {
+            if (!Directory.Exists(ThirdPartyFolder))
+                return new ISpecialSequenceValidator[0];
+
             if (validators == null)
             {
                 validators = new List<ISpecialSequenceValidator>();
@@ -46,6 +49,9 @@ namespace Spot
         /// <returns>All third party implementations of the <see cref="ISpecialSequenceValidator"/> interface.</returns>
         public static IEnumerable<ISpecialSequenceGenerator> GetSpecialSequenceGenerators()
         {
+            if (!Directory.Exists(ThirdPartyFolder))
+                return new ISpecialSequenceGenerator[0];
+
             if (generators == null)
             {
                 generators = new List<ISpecialSequenceGenerator>();
