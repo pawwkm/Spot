@@ -246,7 +246,7 @@ namespace Spot.Ebnf
             source = stream;
             long start = stream.Position;
 
-            for (int i = 0; i < Syntax.Start.Branches.Count; i++)
+            for (int i = 0; i < ruleToStartFrom.Branches.Count; i++)
             {
                 Path = new SyntaxPath();
                 Path.ByteIndex = start;
