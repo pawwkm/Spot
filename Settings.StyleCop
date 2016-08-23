@@ -8,7 +8,9 @@
       <Value>cls</Value>
       <Value>dsl</Value>
       <Value>Ebnf</Value>
+      <Value>ExcludedRules</Value>
       <Value>Fuzzy</Value>
+      <Value>IncludedRules</Value>
       <Value>int</Value>
       <Value>Iso</Value>
       <Value>normals</Value>

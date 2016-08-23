@@ -131,13 +131,13 @@ namespace Spot.Ebnf
             else
             {
                 var index = Sentence.Length;
-                var exception = "";
+                var exception = "a";
 
                 do
                 {
                     Visit(term.Factor);
                     if (Sentence.Substring(index).StartsWith(exception))
-                        Sentence = Sentence.Substring(index);
+                        Sentence = Sentence.Substring(0, index);
                     else
                         break;
                 }

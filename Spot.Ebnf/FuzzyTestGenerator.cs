@@ -22,7 +22,7 @@ namespace Spot.Ebnf
 
         private Syntax source;
 
-        private IList<ISpecialSequenceGenerator> specialSequenceGenerator = new List<ISpecialSequenceGenerator>();
+        private IList<ISpecialSequenceGenerator> specialSequenceGenerators = new List<ISpecialSequenceGenerator>();
 
         /// <summary>
         /// The maximum level of recursive nesting for each rule.
@@ -84,7 +84,7 @@ namespace Spot.Ebnf
         {
             get
             {
-                return specialSequenceGenerator;
+                return specialSequenceGenerators;
             }
         }
 
