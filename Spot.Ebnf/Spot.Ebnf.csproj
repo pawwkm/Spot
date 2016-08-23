@@ -56,11 +56,14 @@
     <Compile Include="EmptySequence.cs" />
     <Compile Include="ExcludedRules.cs" />
     <Compile Include="FuzzyTestGenerator.cs" />
+    <Compile Include="FuzzyTestReader.cs" />
+    <Compile Include="FuzzyTestWriter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GroupedSequence.cs" />
     <Compile Include="IEnumerable`1Extensions.cs" />
     <Compile Include="IList`1Extensions.cs" />
     <Compile Include="IncludedRules.cs" />
+    <Compile Include="IPass.cs" />
     <Compile Include="ISpecialSequenceGenerator.cs" />
     <Compile Include="ISpecialSequenceValidator.cs" />
     <Compile Include="Justifications.cs" />
@@ -69,8 +72,11 @@
     <Compile Include="MetaIdentifier.cs" />
     <Compile Include="OptionalSequence.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="Pass.cs" />
     <Compile Include="PathState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomExtensions.cs" />
+    <Compile Include="RandomPass.cs" />
     <Compile Include="RepeatedSequence.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="RuleFrame.cs" />
