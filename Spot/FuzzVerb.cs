@@ -51,16 +51,6 @@ namespace Spot
         }
 
         /// <summary>
-        /// If true the number of tests generated is displayed.
-        /// </summary>
-        [Option('c', "count", Help = "Displays the number of tests generated")]
-        public bool DisplayTestCount
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// A short description of this verb. Usually a sentence summary.
         /// </summary>
         public override string Help
@@ -122,18 +112,12 @@ namespace Spot
             if (OutputFile == "")
                 OutputFile = Path.Combine(Path.GetDirectoryName(SyntaxFile), Path.GetFileNameWithoutExtension(SyntaxFile) + ".fuzz");
 
-            ulong count = 0;
             using (FileStream stream = new FileStream(OutputFile, FileMode.Create, FileAccess.Write, FileShare.None, 4194304, FileOptions.None))
-                count = generator.Generate(stream, syntax, rule);
-
-            if (DisplayTestCount)
             {
-                if (count == 0)
-                    Console.WriteLine("No tests generated");
-                else if (count == 1)
-                    Console.WriteLine("1 test generated");
-                else
-                    Console.WriteLine("{0} tests generated", count);
+                var writer = new FuzzyTestWriter();
+                var tests = generator.Generate(syntax, rule);
+
+                writer.Write(tests, stream);
             }
 
             return 0;

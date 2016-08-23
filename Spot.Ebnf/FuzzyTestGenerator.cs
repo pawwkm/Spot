@@ -22,8 +22,6 @@ namespace Spot.Ebnf
 
         private Syntax source;
 
-        private Stream stream;
-
         private IList<ISpecialSequenceGenerator> specialSequenceGenerator = new List<ISpecialSequenceGenerator>();
 
         /// <summary>
@@ -93,37 +91,31 @@ namespace Spot.Ebnf
         /// <summary>
         /// Generates fuzzy tests for the <paramref name="syntax"/>.
         /// </summary>
-        /// <param name="output">Where the fuzz tests are written to.</param>
         /// <param name="syntax">The syntax to generate tests for.</param>
-        /// <returns>The number of tests generated.</returns>
+        /// <returns>All the generated tests.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="output"/> or <paramref name="syntax"/> is null.
+        /// <paramref name="syntax"/> is null.
         /// </exception>
         /// <exception cref="SpecialSequenceException">
         /// The <paramref name="syntax"/> contains an erroneous special sequence.
         /// </exception>
-        public ulong Generate(Stream output, Syntax syntax)
+        public IEnumerable<string> Generate(Syntax syntax)
         {
-            if (output == null)
-                throw new ArgumentNullException(nameof(output));
-
             if (syntax == null)
                 throw new ArgumentNullException(nameof(syntax));
 
-            return Generate(output, syntax, syntax.Start);
+            return Generate(syntax, syntax.Start);
         }
 
         /// <summary>
         /// Generates fuzzy tests for the <paramref name="syntax"/> starting
         /// from the given <paramref name="rule"/>.
         /// </summary>
-        /// <param name="output">Where the fuzz tests are written to.</param>
         /// <param name="syntax">The syntax to generate tests for.</param>
         /// <param name="rule">The rule to start generating test from.</param>
-        /// <returns>The number of tests generated.</returns>
+        /// <returns>All the generated tests.</returns>
         /// <exception cref="ArgumentNullException">
-        /// <paramref name="output"/>, <paramref name="syntax"/> or 
-        /// <paramref name="rule"/> is null.
+        /// <paramref name="syntax"/> or <paramref name="rule"/> is null.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// <paramref name="rule"/> is not defined in the <paramref name="syntax"/>.
@@ -131,36 +123,18 @@ namespace Spot.Ebnf
         /// <exception cref="SpecialSequenceException">
         /// The <paramref name="syntax"/> contains an erroneous special sequence.
         /// </exception>
-        public ulong Generate(Stream output, Syntax syntax, Rule rule)
+        public IEnumerable<string> Generate(Syntax syntax, Rule rule)
         {
-            if (output == null)
-                throw new ArgumentNullException(nameof(output));
             if (syntax == null)
                 throw new ArgumentNullException(nameof(syntax));
             if (rule == null)
                 throw new ArgumentNullException(nameof(rule));
 
+            source = syntax;
             if (!syntax.Rules.Contains(rule))
                 throw new ArgumentException("The rule is not part of the syntax");
 
-            source = syntax;
-            stream = output;
-
-            ulong count = 0;
-            foreach (var test in Generate(rule))
-            {
-                ushort length = (ushort)test.Length;
-
-                var bytes = BitConverter.GetBytes(length);
-                stream.Write(bytes, 0, bytes.Length);
-
-                bytes = Encoding.UTF8.GetBytes(test);
-                stream.Write(bytes, 0, bytes.Length);
-
-                count++;
-            }
-
-            return count;
+            return Generate(rule);
         }
 
         /// <summary>
@@ -243,22 +217,6 @@ namespace Spot.Ebnf
         }
 
         /// <summary>
-        /// Enumerates <paramref name="a"/> and <paramref name="b"/> as if they were
-        /// one list consisting of <paramref name="a"/>'s elements then <paramref name="b"/>'s elements.
-        /// </summary>
-        /// <param name="a">The first list.</param>
-        /// <param name="b">The second list.</param>
-        /// <returns>A merged version of <paramref name="a"/> and <paramref name="b"/>.</returns>
-        private IEnumerable<string> Merge(IEnumerable<string> a, IEnumerable<string> b)
-        {
-            foreach (var value in a)
-                yield return value;
-
-            foreach (var value in b)
-                yield return value;
-        }
-
-        /// <summary>
         /// Generates fuzzy tests for the <paramref name="term"/>.
         /// </summary>
         /// <param name="term">The term to generate tests for.</param>
@@ -338,7 +296,7 @@ namespace Spot.Ebnf
         {
             IEnumerable<string> fragments = new string[0];
             foreach (var branch in sequence.Branches)
-                fragments = Merge(fragments, Generate(branch));
+                fragments = fragments.Concat(Generate(branch));
 
             foreach (var combination in fragments.Combinations(Repetitions))
                 yield return combination.Join();

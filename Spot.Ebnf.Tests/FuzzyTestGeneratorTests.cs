@@ -16,7 +16,7 @@ namespace Spot.Ebnf
     public class FuzzyTestGeneratorTests
     {
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle an empty syntax
         /// </summary>
         [Test]
@@ -28,17 +28,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new string[0];
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(0, count);
-                FuzzAssert.AreEqual(stream);
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle a rule consisting of a single terminal.
         /// </summary>
         [Test]
@@ -50,17 +47,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abc" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(1, count);
-                FuzzAssert.AreEqual(stream, "abc");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle a rule consisting of a single terminal x times.
         /// </summary>
         [Test]
@@ -72,17 +66,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abcabcabc" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(1, count);
-                FuzzAssert.AreEqual(stream, "abcabcabc");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle nested rules consisting of a single terminal.
         /// </summary>
         [Test]
@@ -96,17 +87,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abc" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(1, count);
-                FuzzAssert.AreEqual(stream, "abc");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle nested rules consisting of a single terminal x times.
         /// </summary>
         [Test]
@@ -120,17 +108,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abcabcabc" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(1, count);
-                FuzzAssert.AreEqual(stream, "abcabcabc");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle branches.
         /// </summary>
         [Test]
@@ -142,17 +127,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abc", "def" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(2, count);
-                FuzzAssert.AreEqual(stream, "abc", "def");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle rules consisting of terminals and a group of terminals.
         /// </summary>
         [Test]
@@ -164,17 +146,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abd", "acd" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(2, count);
-                FuzzAssert.AreEqual(stream, "abd", "acd");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle nested rules consisting of groups with terminals.
         /// </summary>
         [Test]
@@ -188,17 +167,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abd", "acd" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(2, count);
-                FuzzAssert.AreEqual(stream, "abd", "acd");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle rules consisting of optional terminals.
         /// </summary>
         [Test]
@@ -210,17 +186,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "ad", "abd", "acd" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(3, count);
-                FuzzAssert.AreEqual(stream, "ad", "abd", "acd");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle nested rules consisting of optional terminals.
         /// </summary>
         [Test]
@@ -234,17 +207,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "ad", "abd", "acd" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(3, count);
-                FuzzAssert.AreEqual(stream, "ad", "abd", "acd");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle rules consisting of a repeated sequence terminals.
         /// </summary>
         [Test]
@@ -256,17 +226,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "ad", "abd", "acd", "abbd", "abcd", "acbd", "accd" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(7, count);
-                FuzzAssert.AreEqual(stream, "ad", "abd", "acd", "abbd", "abcd", "acbd", "accd");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle nested rules consisting of a repeated sequence terminals.
         /// </summary>
         [Test]
@@ -280,17 +247,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "ad", "abd", "acd", "abbd", "abcd", "acbd", "accd" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(7, count);
-                FuzzAssert.AreEqual(stream, "ad", "abd", "acd", "abbd", "abcd", "acbd", "accd");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle nested rules with exceptions.
         /// </summary>
         [Test]
@@ -304,17 +268,14 @@ namespace Spot.Ebnf
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var expected = new[] { "abcjkl", "defjkl" };
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(2, count);
-                FuzzAssert.AreEqual(stream, "abcjkl", "defjkl");
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// can handle special sequences.
         /// </summary>
         [Test]
@@ -336,17 +297,13 @@ namespace Spot.Ebnf
             var generator = new FuzzyTestGenerator();
             generator.SpecialSequenceGenerators.Add(sequence);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
+            var actual = generator.Generate(syntax);
 
-                Assert.AreEqual(10, count);
-                FuzzAssert.AreEqual(stream, expected);
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// generates all the variations of a rule consisting definition list 
         /// of the same rule repeated three times.
         /// </summary>
@@ -370,18 +327,13 @@ namespace Spot.Ebnf
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
+            var actual = generator.Generate(syntax);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
-
-                Assert.AreEqual(1000, count);
-                FuzzAssert.AreEqual(stream, expected.ToArray());
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// generates all the variations of a rule consisting definition list 
         /// of the same rule repeated three times using the '*' symbol.
         /// </summary>
@@ -405,18 +357,13 @@ namespace Spot.Ebnf
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
+            var actual = generator.Generate(syntax);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
-
-                Assert.AreEqual(1000, count);
-                FuzzAssert.AreEqual(stream, expected.ToArray());
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// generates all the variations of a rule consisting definition list 
         /// of identical branched groups of terminals.
         /// </summary>
@@ -441,18 +388,13 @@ namespace Spot.Ebnf
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
+            var actual = generator.Generate(syntax);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
-
-                Assert.AreEqual(1000, count);
-                FuzzAssert.AreEqual(stream, expected.ToArray());
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// generates all the variations of a rule consisting definition list 
         /// of two rules. The first has less branches than the second.
         /// </summary>
@@ -474,18 +416,13 @@ namespace Spot.Ebnf
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
+            var actual = generator.Generate(syntax);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
-
-                Assert.AreEqual(40, count);
-                FuzzAssert.AreEqual(stream, expected.ToArray());
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         /// <summary>
-        /// Tests that <see cref="FuzzyTestGenerator.Generate(Stream, Syntax)"/>
+        /// Tests that <see cref="FuzzyTestGenerator.Generate(Syntax)"/>
         /// generates all the variations of a rule consisting definition list 
         /// of two rules. The first has more branches than the second.
         /// </summary>
@@ -507,14 +444,9 @@ namespace Spot.Ebnf
             var reader = new SyntaxReader();
             var syntax = reader.Read(text.ToStream());
             var generator = new FuzzyTestGenerator();
+            var actual = generator.Generate(syntax);
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                var count = generator.Generate(stream, syntax);
-
-                Assert.AreEqual(40, count);
-                FuzzAssert.AreEqual(stream, expected.ToArray());
-            }
+            CollectionAssert.AreEquivalent(expected, actual);
         }
     }
 }
