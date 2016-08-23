@@ -3,6 +3,7 @@ using Pote.Text;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Spot.Ebnf.Unicode
 {
@@ -321,37 +322,101 @@ namespace Spot.Ebnf.Unicode
         /// </param>
         private void Character(bool excludeCharacter)
         {
-            Token<TokenType> token = analyzer.Next();
+            var list = Enumerable.Empty<char>();
+            if (analyzer.NextIs(TokenType.Character).Then(".."))
+                list = Range();
+            else
+                list = new[] { Character() };
+
+            if (!sequence.IsValidSequence)
+                return;
+
+            if (excludeCharacter)
+            {
+                foreach (var excluded in list)
+                    ExcludeCharacter(excluded);
+            }
+            else
+            {
+                foreach (var c in list)
+                {
+                    if (!sequence.Characters.Contains(c))
+                        sequence.Characters.Add(c);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses the next character.
+        /// </summary>
+        /// <returns>The parsed character.</returns>
+        /// <remarks>
+        /// If the parsing fails the sequence is not valid.
+        /// </remarks>
+        private char Character()
+        {
+            var token = analyzer.Next();
             if (token.Type != TokenType.Character)
             {
                 sequence.IsValidSequence = false;
-                return;
+
+                return '\0';
             }
 
-            char parsedCharecter = (char)Convert.ToInt32(token.Text.Substring(2), 16);
-            if (excludeCharacter)
+            return (char)Convert.ToInt32(token.Text.Substring(2), 16);
+        }
+
+        /// <summary>
+        /// Excludes a single character from the sequence.
+        /// </summary>
+        /// <param name="excluded">The character to exclude.</param>
+        private void ExcludeCharacter(char excluded)
+        {
+            UnicodeCategory category = char.GetUnicodeCategory(excluded);
+            sequence.Characters.Remove(excluded);
+
+            if (sequence.Categories.Contains(category))
             {
-                UnicodeCategory category = char.GetUnicodeCategory(parsedCharecter);
-                sequence.Characters.Remove(parsedCharecter);
-
-                if (sequence.Categories.Contains(category))
+                sequence.Categories.Remove(category);
+                for (char c = '\0'; c < char.MaxValue; c++)
                 {
-                    sequence.Categories.Remove(category);
-                    for (char c = '\0'; c < char.MaxValue; c++)
-                    {
-                        if (parsedCharecter == c)
-                            continue;
+                    if (excluded == c)
+                        continue;
 
-                        if (category == char.GetUnicodeCategory(c))
-                        {
-                            if (!sequence.Characters.Contains(c))
-                                sequence.Characters.Add(c);
-                        }
+                    if (category == char.GetUnicodeCategory(c))
+                    {
+                        if (!sequence.Characters.Contains(c))
+                            sequence.Characters.Add(c);
                     }
                 }
             }
-            else if (!sequence.Characters.Contains(parsedCharecter))
-                sequence.Characters.Add(parsedCharecter);
+        }
+
+        /// <summary>
+        /// Parses the next range.
+        /// </summary>
+        /// <returns>The parsed range.</returns>
+        /// <remarks>
+        /// If the parsing fails the sequence is not valid.
+        /// </remarks>
+        private IEnumerable<char> Range()
+        {
+            var from = (int)Character();
+
+            var token = analyzer.Next();
+            if (token.Text != "..")
+            {
+                sequence.IsValidSequence = false;
+
+                yield break;
+            }
+
+            var to = (int)Character();
+            if (to < from)
+                sequence.IsValidSequence = false;
+
+            foreach (char c in new Range(from, to))
+                yield return c;
         }
     }
 }

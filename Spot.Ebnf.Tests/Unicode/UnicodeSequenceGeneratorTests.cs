@@ -1,9 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Spot.Ebnf.Unicode
 {
@@ -15,41 +10,20 @@ namespace Spot.Ebnf.Unicode
     {
         /// <summary>
         /// Tests that <see cref="UnicodeSequenceGenerator.Generate(string)"/>
-        /// generates all the characters in a unicode character class.
+        /// generates all the characters in a unicode special sequence.
         /// </summary>
+        /// <param name="sequence">The sequence to generate characters from.</param>
+        /// <param name="expected">The expected result.</param>
         [Test]
-        public void Generate_SequenceOfClasses_Success()
+        [TestCase(@"Unicode character \u0041..\u0043", "A", "B", "C")]
+        [TestCase(@"Unicode characters \u0041 and \u0042", "A", "B")]
+        [TestCase("Unicode class zs", "\u0020", "\u00A0", "\u1680", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005", "\u2006", "\u2007", "\u2008", "\u2009", "\u200A", "\u202F", "\u205F", "\u3000")]
+        public void Generate_ValidUnicodeSequence_Lol(string sequence, params string[] expected)
         {
-            string[] expected = 
-            { 
-                "\u0020", "\u00A0", "\u1680", "\u2000", "\u2001",
-                "\u2002", "\u2003", "\u2004", "\u2005", "\u2006",
-                "\u2007", "\u2008", "\u2009", "\u200A", "\u202F",
-                "\u205F", "\u3000"
-            };
-
             var generator = new UnicodeSequenceGenerator();
-            var generated = generator.Generate("Unicode class zs");
+            var actual = generator.Generate(sequence);
 
-            CollectionAssert.AreEquivalent(expected, generated);
-        }
-
-        /// <summary>
-        /// Tests that <see cref="UnicodeSequenceGenerator.Generate(string)"/>
-        /// generates all the characters in the defined sequence.
-        /// </summary>
-        [Test]
-        public void Generate_SequenceOfCcharacters_Success()
-        {
-            string[] expected = 
-            {
-                "A", "B"
-            };
-
-            var generator = new UnicodeSequenceGenerator();
-            var generated = generator.Generate(@"Unicode characters \u0041 and \u0042");
-
-            CollectionAssert.AreEquivalent(expected, generated);
+            CollectionAssert.AreEquivalent(expected, actual);
         }
     }
 }

@@ -16,7 +16,8 @@ namespace Spot
         {
             var interpreter = new Interpreter();
             interpreter.AddVerb<TestVerb>()
-                       .AddVerb<FuzzVerb>();
+                       .AddVerb<FuzzVerb>()
+                       .AddVerb<RandomVerb>();
 
             return interpreter.Run(args);
         }
