@@ -3,6 +3,8 @@
   <Words>
     <Recognized>
       <Word>Ebnf</Word>
+      <Word>IncludedRules</Word>
+      <Word>ExcludedRules</Word>
     </Recognized>
   </Words>
 </Dictionary>

@@ -116,9 +116,9 @@ namespace Spot.Ebnf
                 references.Add(rule, new List<string>());
                 foreach (var r in source)
                 {
-                    foreach (var l in r.Branches)
+                    foreach (var branch in r.Branches)
                     {
-                        if (FindReferences(l, rule.Name))
+                        if (FindReferences(branch, rule.Name) && !references[rule].Contains(r.Name))
                             references[rule].Add(r.Name);
                     }
                 }

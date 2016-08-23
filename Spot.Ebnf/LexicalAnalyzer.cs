@@ -135,11 +135,11 @@ namespace Spot.Ebnf
             InputPosition start = Position.DeepCopy();
             string text = "";
 
-            Advance();
+            bool enclosedInDoubleQuotes = Advance() == '"';
             while (!Source.EndOfStream)
             {
                 char c = (char)Source.Peek();
-                if (c == '"' || c == '\'')
+                if (enclosedInDoubleQuotes && c == '"' || !enclosedInDoubleQuotes && c == '\'')
                 {
                     Advance();
                     break;

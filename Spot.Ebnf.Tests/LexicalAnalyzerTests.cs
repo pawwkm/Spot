@@ -185,5 +185,33 @@ namespace Spot.Ebnf
                 Assert.AreEqual(1, analyzer.Position.Index);
             }
         }
+
+        /// <summary>
+        /// Tests that <see cref="LexicalAnalyzer{TokenType}.Next()"/> can 
+        /// matches double quotes enclosing a terminal string.
+        /// </summary>
+        [Test]
+        public void Next_TerminalEnclosedInDoubleQuotesContaningSingleQuote_Success()
+        {
+            var analyzer = new LexicalAnalyzer("\"'\"");
+            var token = analyzer.Next();
+
+            Assert.AreEqual("'", token.Text);
+            Assert.AreEqual(TokenType.TerminalString, token.Type);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="LexicalAnalyzer{TokenType}.Next()"/> can 
+        /// matches single quotes enclosing a terminal string.
+        /// </summary>
+        [Test]
+        public void Next_TerminalEnclosedInSingleQuotesContaningDoubleQuote_Success()
+        {
+            var analyzer = new LexicalAnalyzer("'\"'");
+            var token = analyzer.Next();
+
+            Assert.AreEqual("\"", token.Text);
+            Assert.AreEqual(TokenType.TerminalString, token.Type);
+        }
     }
 }
