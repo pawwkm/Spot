@@ -25,11 +25,14 @@ class =
     "sk" | "sm" | "so" | "zi" | "zp" | "zs" ;
 
 characters = 
-	"character", ws, character |
-    "characters", ws, character, { ws, ",", character }, ws, "and", ws character ;
+	"character", ws, ( character | range ) |
+    "characters", ws, ( character | range ), { ws, ",", ( character | range ) }, ws, "and", ws ( character | range ) ;
 
 character = 
     "\u", 4 * digit ;
+
+range =
+	character, [ ws ], "..", [ ws ], character ;
     
 digit = 
     "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" |

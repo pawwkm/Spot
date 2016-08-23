@@ -32,6 +32,12 @@ namespace Spot.Ebnf.Unicode
             "except"
         };
 
+        private static readonly string[] Symbols =
+        {
+            ",",
+            ".."
+        };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UnicodeSequenceLexicalAnalyzer"/> class.
         /// </summary>
@@ -65,15 +71,14 @@ namespace Spot.Ebnf.Unicode
             char c = (char)Source.Peek();
             if (c == '\\')
                 return Character();
-            if (c.IsOneOf(','))
-                return Symbol();
             if (Source.MatchesAnyOf(Keywords))
                 return Keyword();
             if (Source.MatchesAnyOf(Classes))
                 return ClassLiteral();
+            if (Source.MatchesAnyOf(Symbols))
+                return Symbol();
 
-            InputPosition start = Position.DeepCopy();
-            return new Token<TokenType>(Advance(), TokenType.Invalid, start);
+            return Unknown();
         }
 
         /// <summary>
@@ -83,20 +88,27 @@ namespace Spot.Ebnf.Unicode
         /// </summary>
         private void SkipWhiteSpaces()
         {
+            while (NextIsWhiteSpace())
+                Advance();
+        }
+
+        /// <summary>
+        /// Checks if the next character is a white space.
+        /// </summary>
+        /// <returns>true if the next character is a white space.</returns>
+        private bool NextIsWhiteSpace()
+        {
             char[] characters =
             {
                 '\u0009', '\u000B', '\u000C', '\u000D',
                 '\u000A', '\u0085', '\u2028', '\u2029'
             };
 
-            while (!Source.EndOfStream)
-            {
-                char c = (char)Source.Peek();
-                if (!characters.Contains(c) && char.GetUnicodeCategory(c) != UnicodeCategory.SpaceSeparator)
-                    break;
+            char c = (char)Source.Peek();
+            if (!characters.Contains(c) && char.GetUnicodeCategory(c) != UnicodeCategory.SpaceSeparator)
+                return false;
 
-                Advance();
-            }
+            return true;
         }
 
         /// <summary>
@@ -141,7 +153,13 @@ namespace Spot.Ebnf.Unicode
         private Token<TokenType> Symbol()
         {
             InputPosition start = Position.DeepCopy();
-            return new Token<TokenType>(Advance(), TokenType.Symbol, start);
+            foreach (string symbol in Symbols)
+            {
+                if (Consume(symbol))
+                    return new Token<TokenType>(symbol, TokenType.Symbol, start);
+            }
+
+            return Unknown();
         }
 
         /// <summary>
@@ -182,6 +200,26 @@ namespace Spot.Ebnf.Unicode
             text += Advance();
 
             return new Token<TokenType>(text, TokenType.ClassLiteral, start);
+        }
+
+        /// <summary>
+        /// Consumes the next unknown from the input.
+        /// </summary>
+        /// <returns>The consumed unknown from the input.</returns>
+        private Token<TokenType> Unknown()
+        {
+            InputPosition start = Position.DeepCopy();
+            string text = "";
+
+            while (!Source.EndOfStream)
+            {
+                if (NextIsWhiteSpace())
+                    break;
+
+                text += Advance();
+            }
+
+            return new Token<TokenType>(text, TokenType.Unknown, start);
         }
     }
 }
