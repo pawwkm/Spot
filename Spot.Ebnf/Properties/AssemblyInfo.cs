@@ -39,3 +39,4 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(false)]
 
 [assembly: InternalsVisibleTo("Spot.Ebnf.Tests")]
+[assembly: InternalsVisibleTo("Spot.SrtL.Tests")]

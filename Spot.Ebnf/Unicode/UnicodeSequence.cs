@@ -90,5 +90,13 @@ namespace Spot.Ebnf.Unicode
             if (!cache.ContainsKey(raw))
                 cache.Add(raw, sequence);
         }
+
+        /// <summary>
+        /// Clears the cache.
+        /// </summary>
+        internal static void ClearCache()
+        {
+            cache = new Dictionary<string, UnicodeSequence>();
+        }
     }
 }

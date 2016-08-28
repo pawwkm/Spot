@@ -132,7 +132,7 @@ namespace Spot.Ebnf
             TokenBuilder builder = new TokenBuilder();
             var tokens = builder.MetaIdentifier("Rule")
                                 .Symbol("=")
-                                .MetaIdentifier("Rule")
+                                .TerminalString("a")
                                 .Symbol(";")
                                 .Build();
 
@@ -152,7 +152,7 @@ namespace Spot.Ebnf
 
             Assert.AreEqual(1, single.SyntacticTerms[0].Factor.NumberOfRepetitions);
 
-            Assert.AreEqual("Rule", ((MetaIdentifier)single.SyntacticTerms[0].Factor.SyntacticPrimary).Name);
+            Assert.AreEqual("a", ((TerminalString)single.SyntacticTerms[0].Factor.SyntacticPrimary).Value);
         }
 
         /// <summary>

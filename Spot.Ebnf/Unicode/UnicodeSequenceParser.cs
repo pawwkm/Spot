@@ -84,7 +84,7 @@ namespace Spot.Ebnf.Unicode
             else
                 sequence.IsValidSequence = false;
 
-            if (analyzer.LookAhead().Type != TokenType.EndOfInput)
+            if (!analyzer.NextIs(TokenType.EndOfInput))
                 sequence.IsValidSequence = false;
         }
 
@@ -300,7 +300,7 @@ namespace Spot.Ebnf.Unicode
             }
 
             if (token.Text != "and")
-                sequence.IsValidSequence = true;
+                sequence.IsValidSequence = false;
 
             analyzer.Next();
 

@@ -38,15 +38,28 @@ namespace Spot.Ebnf
             ResolveReferencedBy(references);
             ResolveRulesReferenced();
 
-            foreach (Rule rule in syntax)
+            var possibleStartRules = (from r in syntax
+                                      where r.ReferencedBy.Count == 0
+                                      orderby r.Name
+                                      select r).ToList();
+
+            if (possibleStartRules.Count == 1)
+                syntax.Start = possibleStartRules[0];
+
+            switch (possibleStartRules.Count)
             {
-                if (rule.ReferencedBy.Any(x => x != rule))
-                    continue;
+                case 0:
+                    throw new ArgumentException("Contains no start rule.", nameof(syntax));
+                case 1:
+                    syntax.Start = possibleStartRules[0];
+                    break;
+                default:
+                    var names = from r in possibleStartRules.Take(possibleStartRules.Count - 1)
+                                select "'" + r.Name + "'";
 
-                if (syntax.Start != null)
-                    throw new ArgumentException("Contains more than one start rule.", "syntax");
+                    var rules = string.Join(", ", names) + " and '" + possibleStartRules.Last().Name + "'";
 
-                syntax.Start = rule;
+                    throw new ArgumentException($"The rules {rules} are possible starting rules.");
             }
         }
 
