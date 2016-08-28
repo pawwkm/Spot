@@ -138,6 +138,38 @@ namespace Spot.Ebnf
         }
 
         /// <summary>
+        /// Generates fuzzy tests for the <paramref name="syntax"/> starting
+        /// from the given <paramref name="rule"/>.
+        /// </summary>
+        /// <param name="syntax">The syntax to generate tests for.</param>
+        /// <param name="rule">The rule to start generating test from.</param>
+        /// <returns>All the generated tests.</returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="syntax"/> or <paramref name="rule"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// <paramref name="rule"/> is not defined in the <paramref name="syntax"/>.
+        /// </exception>
+        /// <exception cref="SpecialSequenceException">
+        /// The <paramref name="syntax"/> contains an erroneous special sequence.
+        /// </exception>
+        public IEnumerable<string> Generate(Syntax syntax, string rule)
+        {
+            if (syntax == null)
+                throw new ArgumentNullException(nameof(syntax));
+            if (rule == null)
+                throw new ArgumentNullException(nameof(rule));
+
+            source = syntax;
+
+            var r = syntax.GetRuleBy(rule);
+            if (r == null)
+                throw new ArgumentException("The rule is not part of the syntax");
+
+            return Generate(r);
+        }
+
+        /// <summary>
         /// Generates a fuzzy test for the <paramref name="terminal"/>.
         /// </summary>
         /// <param name="terminal">The terminal to generate tests for.</param>

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Pote.Text;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Spot.SrtL
@@ -537,6 +538,19 @@ namespace Spot.SrtL
             Assert.AreEqual(2, test.Validity.DefinedAt.Line);
             Assert.AreEqual(36, test.Validity.DefinedAt.Column);
             Assert.True(test.Validity.IsValid);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void Parse()
+        {
+            var reader = new SrtLReader();
+            using (var stream = File.OpenRead("D:\\Fuck.srtl"))
+            {
+                reader.Read(stream);
+            }
         }
 
         /// <summary>

@@ -139,7 +139,7 @@ namespace Spot.Ebnf.Unicode
                 c = Advance();
                 text += c;
 
-                if (!char.IsDigit(c))
+                if (!char.IsDigit(c) && c < 'A' && c > 'F' && c < 'a' && c > 'f')
                     return new Token<TokenType>(text, TokenType.Invalid, start);
             }
 

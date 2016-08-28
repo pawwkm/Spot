@@ -54,7 +54,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fuzzer.cs" />
     <Compile Include="FuzzyTestGeneratorTests.cs" />
+    <Compile Include="IEnumerable1ExtensionsTests.cs" />
     <Compile Include="LeftRecursionCheckerTests.cs" />
     <Compile Include="LexicalAnalyzerTests.cs" />
     <Compile Include="ParserTests.cs" />

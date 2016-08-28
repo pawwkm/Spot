@@ -1,6 +1,7 @@
 ﻿using NSubstitute;
 using NUnit.Framework;
 using Pote.Text;
+using System.Linq;
 
 namespace Spot.Ebnf.Unicode
 {
@@ -10,6 +11,16 @@ namespace Spot.Ebnf.Unicode
     [TestFixture]
     public class UnicodeSpecialSequenceValidatorTests
     {
+        /// <summary>
+        /// Calls the <see cref="UnicodeSequence.ClearCache()"/> method before 
+        /// any test is run.
+        /// </summary>
+        [TestFixtureSetUp]
+        public void ClearValidatorCache()
+        {
+            UnicodeSequence.ClearCache();
+        }
+
         /// <summary>
         /// Tests that <see cref="UnicodeSpecialSequenceValidator.IsValid(string)"/>
         /// validates all possible variations of valid sequences.

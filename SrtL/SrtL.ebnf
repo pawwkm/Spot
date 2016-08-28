@@ -29,29 +29,28 @@ exclude all rules =
 	
 validity =
     "is", ws, [ "not", ws ], "valid" ;
-	
-concatenated string list =
-    concatenated string,
-    { [ ws ], "," [ ws ], concatenated string };
 
 concatenated string =
-    string, { [ ws ], string };
+    string, { [ ws ], string } ;
 
 string list =
-    string, { [ ws ], "," [ ws ], string };
+    string, { [ ws ], ",", [ ws ], string } ;
 
 string =
     '"', { character | unicode code point | escape sequence }, '"';
 
 character =
-    ? Any Unicode character except classes zl and zp and 
-    characters \u0000 .. \u001F, \u0022, \u007F, \u0081, \u008D, 
-    \u008F, \u0090, \u009D, \u1680, \u180E, \u2000 .. \u200F, 
-    \u202A .. \u202F,  \u205F, \u2060, \u2066 .. \u206F, \u00A0, 
-    \u3000, \uFEFF, \uFFF9 .. \uFFFB ? ;
+    ? All Unicode characters except classes zi and zp and 
+    characters \u0000 .. \u001F, \u0022, \u005C, \u007F, \u0081, 
+    \u008D, \u008F, \u0090, \u009D, \u1680, \u180E, 
+    \u2000 .. \u200F, \u202A .. \u202F,  \u205F, \u2060, 
+    \u2066 .. \u206F, \u00A0, \u3000, \uFEFF and \uFFF9 .. \uFFFB ? ;
 
 unicode code point =
-    "\", "u", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;
+    "\u", 4 * ( digit | "a" | "b" | "c" | "d" | "e" | "f" ) ;
+    
+digit =
+    "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 
 escape sequence =
     "\", 
@@ -62,4 +61,4 @@ ws =
 
 ws character =
     ? Unicode class zs and characters \u0009 .. \u000D, \u0085, 
-    \u2028 and \u2029 ? ; 
+    \u2028 and \u2029 ? ;

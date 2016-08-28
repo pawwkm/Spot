@@ -58,19 +58,16 @@ namespace Spot.Ebnf
             if (range == null)
                 throw new ArgumentNullException(nameof(range));
 
-            List<IEnumerable<T>> results = new List<IEnumerable<T>>();
             foreach (var amount in range)
             {
                 if (amount == 0)
-                    results.Add(new T[] { });
+                    yield return new T[0];
                 else
                 {
                     foreach (var set in list.Combinations(amount))
-                        results.Add(set);
+                        yield return set;
                 }
             }
-
-            return results;
         }
     }
 }

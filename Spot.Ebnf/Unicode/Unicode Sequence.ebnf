@@ -1,11 +1,11 @@
 ﻿sequence = 
-    [ ws ], ( any element except | some elements except ), [ ws ] ; 
+    [ ws ], ( all elements except | some elements except ), [ ws ] ; 
 
 some elements except = 
 	"Unicode", ws, elements, [ ws, except ]  ;
 
-any element except =
-	"All", ws, "Unicode", "characters", [ ws, except ] ;
+all elements except =
+	"All", ws, "Unicode", ws, "characters", [ ws, except ] ;
 
 except =
 	"except", ws, elements ;
@@ -15,7 +15,7 @@ elements =
 
 classes = 
 	"class", ws, class |
-    "classes", ws, class, { ws, ",", class }, ws, "and", ws class ;
+    "classes", ws, class, { ws, ",", class }, ws, "and", ws, class ;
 
 class = 
     "cc" | "cf" | "cn" | "co" | "cs" | "ll" |
